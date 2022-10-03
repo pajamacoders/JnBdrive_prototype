@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:5.7.39
+    ports:
+      - 3306:3306 
+    volumes:
+      - /home/sabi/jnbdrive_disk:/var/lib/mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_ROOT_PASSWORD: Gotobali1!
+      MYSQL_USER: jnb
+      MYSQL_PASSWORD: jnbdrive-0922
+      MYSQL_DATABASE: jnbdrive

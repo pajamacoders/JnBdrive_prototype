@@ -1,0 +1,21 @@
+<style>
+    p.ex1 {
+      font-size: 20px;
+    }
+</style>
+
+{% if logs %}
+    <ul>
+    {% for log in logs %}
+        <body>
+            <h1>부품 시리얼: {{ log.item_id.item_id }} </h1>
+            <h2>검사일: {{ log.inspection_date|date:'Y-m-d' }}</h2> 
+            <h2>구매자: {{ log.item_id.saleshistory.buyer.name }} (대표명: {{ log.item_id.saleshistory.buyer.ceo_name}}, 연락처: {{ log.item_id.saleshistory.buyer.phoneNumber}})</h2>
+            <h2> 검사 내용:</h2>
+            <p class="ex1"> {{ log.log }}</p>
+        </body>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p> 해당 부품에 대한 검사 이력이 없습니다.</p>
+{% endif %}

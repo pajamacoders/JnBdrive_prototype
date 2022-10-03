@@ -1,0 +1,13 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'item_log/style.css' %}">
+
+{% if logs %}
+    <ul>
+    {% for log in logs %}
+        <!-- <li><a href="/item_log/{{ log.item_id.item_id }}/{{ log.inspection_date|date:'Y-m-d' }}/detailed_inspection_history/">{{ log.item_id.item_id }} {{ log.inspection_date }}</a></li> -->
+        <li><a href= "{% url 'item_log:detailed_inspection_history' log.item_id.item_id  log.inspection_date|date:'Y-m-d' %}"> 부품 시리얼:{{ log.item_id.item_id }} 검사일:{{ log.inspection_date }} 구매자:{{ log.item_id.saleshistory.buyer.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p> 해당 부품에 대한 검사 이력이 없습니다.</p>
+{% endif %}
