@@ -1,0 +1,44 @@
+{% extends 'item_log/base_theme.html' %}
+
+{% block content %}
+    <h1 class="mb-5">사용자 정보 입력</h1>
+    <!-- Signup form-->
+    <!-- * * * * * * * * * * * * * * *-->
+    <!-- * * SB Forms Contact Form * *-->
+    <!-- * * * * * * * * * * * * * * *-->
+    <!-- This form is pre-integrated with SB Forms.-->
+    <!-- To make this form functional, sign up at-->
+    <!-- https://startbootstrap.com/solution/contact-forms-->
+    <!-- to get an API token!-->
+    <form class="form-subscribe" id="loginform" action="{% url 'item_log:user_login' %}" method='post'>
+        {% csrf_token %}
+        <!-- product serial address input-->
+        <div class="row">
+            <input class="form-control form-control-lg" id="username" type="text" name="username"  placeholder="아이디" />
+        </div>  
+        <div class="row">
+            <input class="form-control form-control-lg" id="password" type="password" name="password" placeholder="비밀번호" />
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="col-auto"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">로그인</button></div>
+            </div>    
+        </div>
+        <!-- Submit success message-->
+        <!---->
+        <!-- This is what your users will see when the form-->
+        <!-- has successfully submitted-->
+        <div class="d-none" id="submitSuccessMessage">
+            <div class="text-center mb-3">
+                <div class="fw-bolder">Form submission successful!</div>
+                <p>To activate this form, sign up at</p>
+                <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+            </div>
+        </div>
+        <!-- Submit error message-->
+        <!---->
+        <!-- This is what your users will see when there is-->
+        <!-- an error submitting the form-->
+        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+    </form>
+{% endblock %}

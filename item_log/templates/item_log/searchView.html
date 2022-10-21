@@ -1,0 +1,25 @@
+{% extends 'item_log/index.html' %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+
+{# Display a form #}
+<form action="{% url 'item_log:ProductInfo' %}" method="get" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+    <button type="submit" class="btn btn-primary">
+      검색
+    </button>
+  {% endbuttons %}
+</form>
+
+{# Read the documentation for more information #}
