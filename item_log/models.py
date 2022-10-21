@@ -2,39 +2,219 @@ from xml.dom import ValidationErr
 
 from django.db import models
 from django.core.validators import RegexValidator
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
-class Item(models.Model):
-    item_id = models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='부품 시리얼')
-    category_name = models.CharField(max_length=200, null=False, blank=False, editable=True, verbose_name='부품 명')
-    production_date = models.DateField('생산일')
-    
 
-    def __str__(self):
-        return f'부품:{self.category_name}, item_id:{self.item_id}'
-    
-class Buyer(models.Model):
-    phoneNumberRegex = RegexValidator(regex = r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$', message='잘못 된 형식의 연락처를 입력했습니다.')
-    name=models.CharField(max_length=200, verbose_name='업체명')
-    phoneNumber = models.CharField(validators = [phoneNumberRegex], max_length = 20, unique = True, verbose_name='연락처')
-    address = models.CharField(max_length=1000, verbose_name='주소')
-    ceo_name = models.CharField(max_length=200, editable=True, verbose_name='대표명')
 
+class ModelType(models.Model):
+    types = [
+        ('S', 'Single'),
+        ('T', 'Twin')
+    ]
+    model=models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='모델명')
+    type=models.CharField(max_length=200, null=False, blank=False, editable=True, verbose_name='제품 타입', choices=types)
+    load_weight=models.IntegerField(default=0, verbose_name='적재하중')
+    operation_section =models.IntegerField(default=0, verbose_name='운행구간')
+    capacity =models.IntegerField(default=0, verbose_name='최대정원')
+    rated_speed = models.IntegerField(default=0, verbose_name='정격속도')
     def __str__(self):
-        return f'업체_ID:{self.id}, 업체명:{self.name}, 대표명:{self.ceo_name}, 연락처:{self.phoneNumber}, 주소:{self.address},'
-    
-class SalesHistory(models.Model):
-    sales_date = models.DateField('판매일')
-    #date_of_delivery = models.DateField('인도일')
-    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, verbose_name='구매자')
-    item_id = models.OneToOneField(Item, db_column='item_id', unique=True, on_delete=models.CASCADE, verbose_name='부품')
-    price = models.IntegerField(verbose_name = "상품가격", default=0)
-    
-            
-class InspectionLog(models.Model):
-    item_id = models.ForeignKey(Item, on_delete=models.CASCADE, verbose_name='부품')
-    inspection_date = models.DateField('검사일')
-    log = models.TextField(help_text="Comment contents", blank=False, null=False, verbose_name='검사 내용')#models.CharField(max_length=5000)
+        return f'{self.model}'
+    class Meta:
+        db_table = 'modeltype'
+        ordering=['model']
 
+
+
+class ProductionCompany(models.Model):
+    business_number=models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='사업자번호')
+    name=models.CharField(max_length=400, null=False, blank=False, editable=True, verbose_name='제조사명')
+    ceo=models.CharField(max_length=100, null=False, blank=False, editable=True, verbose_name='대표')
+    address=models.CharField(max_length=1000, null=False, blank=False, editable=True, verbose_name='주소')
+    phone=models.CharField(max_length=100, null=False, blank=False, editable=True, verbose_name='전화번호')
+    insureance_company=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='보험사명')
+    insureance=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='보험상품명')
+    start_date=models.DateField('보험기간 시작일', null=True, blank=True, editable=True)
+    end_date=models.DateField('보장기간 종료시점', null=True, blank=True, editable=True)
     def __str__(self):
-        return f'아이디:{self.item_id}, 검사일:{self.inspection_date}, 내용:{self.log}'
+        return f'{self.name}:{self.business_number}'
+    class Meta:
+        db_table = 'production_company'
+        ordering=['business_number']
+
+
+class Product(models.Model):
+    serial=models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='리프트 번호')
+    model=models.ForeignKey(ModelType, null=True, blank=True, on_delete=models.CASCADE, db_column="model_type", verbose_name='모델명')
+    #status=Model.
+    production_company=models.ForeignKey(ProductionCompany, null=True, blank=True, on_delete=models.SET_NULL, db_column="production_company_id", verbose_name='제조업체')
+    production_date=models.DateField('제조일', null=True, blank=True, editable=True)
+    discard_date=models.DateField('폐기일', null=True, blank=True, editable=True)
+    def __str__(self):
+        return f'{self.serial}'
+    class Meta:
+        db_table = 'products'
+        
+
+class PartsType(models.Model):
+    name=models.CharField(max_length=200, primary_key=True, null=False, blank=False, editable=True, verbose_name='부품명')
+    def __str__(self):
+        return f'{self.name}'
+    class Meta:
+        ordering=['name']
+
+
+class Parts(models.Model):
+    serial=models.CharField(max_length=200, primary_key=True, null=False, blank=False, editable=True, verbose_name='시리얼')
+    category=models.ForeignKey(PartsType, null=False, blank=False, on_delete=models.CASCADE, verbose_name='부품명')
+    production_date = models.DateField('제조일', null=True, blank=True, editable=True)
+    discard_date = models.DateField('폐기일', null=True, blank=True, editable=True)
+    model_serial = models.ForeignKey(Product, null=True, blank=True, editable=True, on_delete=models.CASCADE, db_column="model_serial", verbose_name='리프트 번호')
+    def __str__(self):
+        return f'{self.serial}'
+    class Meta:
+        db_table = 'parts'
+        ordering=['serial','production_date']
+        
+
+class Reducer(Parts):
+    recuder_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='감속기 시리얼')
+    gear_ratio = models.FloatField(verbose_name='감속비') # 
+    def __str__(self):
+        return f'{self.recuder_id}'
+    class Meta:
+        db_table = 'reducers'
+        ordering=['recuder_id']
+        
+
+class Motor(Parts):
+    motor_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='모터 시리얼')
+    capacity = models.FloatField(verbose_name='용량') # 
+    def __str__(self):
+        return f'{self.motor_id}'
+
+    class Meta:
+        db_table = 'motor'
+        ordering=['motor_id']
+
+class Break(Parts):
+    break_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='브레이크 시리얼')
+    torque = models.FloatField(verbose_name='토크') # 
+    def __str__(self):
+        return f'{self.break_id}'
+
+    class Meta:
+        db_table = 'breaks'
+        ordering=['break_id']
+
+class SafetyDevice(Parts):
+    safety_device_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='가바나 시리얼')
+    capacity = models.FloatField(verbose_name='용량') # 
+    def __str__(self):
+        return f'{self.safety_device_id}'
+
+    class Meta:
+        db_table = 'safety_devices'
+        ordering=['safety_device_id']
+
+class SelfDiagnosis(models.Model):
+    result_type=    [
+        ('합', '적합'),
+        ('불', '부적합')
+    ]
+    checklist_submit=    [
+        ('제출', '제출'),
+        ('미제출', '미제출')
+    ]
+    product = models.ForeignKey(Product, null=False, blank=False, editable=True, on_delete=models.CASCADE, db_column="product_serial", verbose_name='리프트 번호')
+    check_company = models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='점검업체')
+    checker = models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='점검자')
+    date = models.DateField("점검일자", null=True, blank=True, editable=True)
+    result = models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='자체점검결과', choices=result_type)
+    check_list = models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='점검표', choices=checklist_submit)
+    def __str__(self):
+        return f'{self.product}'
+
+    class Meta:
+        db_table = 'self_diagnosis'
+        ordering=['date', 'product']
+
+class FaultHistory(models.Model):
+    fault_type=models.TextField(verbose_name='고장유형')
+    date=models.DateField(verbose_name='고장일')
+    cause=models.TextField(verbose_name='고장원인')
+    repair_company=models.CharField(max_length=200, verbose_name='구출기관')
+    parts=models.ForeignKey(Parts, null=False, blank=False, on_delete=models.CASCADE, verbose_name='부품 시리얼')
+    def __str__(self):
+        return f'{self.date}: {self.parts}, 이력: {self.fault_type} '
+
+    class Meta:
+        db_table='fault_history'
+        ordering=['date', 'parts']
+
+class CheckCompany(models.Model):
+    name=models.CharField(max_length=200, null=False, blank=False, editable=True, verbose_name='검사기관')
+    class Meta:
+        db_table='check_company'
+        ordering=['name']
+        def __str__(self):
+            return f'{self.name}'
+
+
+class CheckHistory(models.Model):
+    result_types=[('합', '적합'), ('부', ('부적합'))]
+    check_type=models.CharField(max_length=200, verbose_name='검사종류')
+    date=models.DateField(verbose_name='검사일', null=True, blank=True, editable=True)
+    effective_duration=models.CharField(max_length=100, verbose_name='운행유효기간', null=True, blank=True, editable=True)
+    inspection_agency=models.ForeignKey(CheckCompany, verbose_name='검사기관',  null=False, blank=False, editable=True, on_delete=models.DO_NOTHING)
+    inspector=models.CharField(max_length=100, null=True, blank=True, editable=True, verbose_name='검사원')
+    result=models.CharField(max_length=100, null=False, blank=False, editable=True, verbose_name='합격유무', choices=result_types)
+    part=models.ForeignKey(Parts, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='부품 시리얼')
+    product=models.ForeignKey(Product, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='제품 시리얼')
+    
+    class Meta:
+        db_table='check_history'
+        ordering=['date','product', 'part']
+        constraints = [
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_part_or_product",
+                check=(
+                    models.Q(part__isnull=True,product__isnull=False)|
+                    models.Q(part__isnull=False,product__isnull=True)
+
+                ),
+            )
+        ]
+
+
+
+class Contract(models.Model):
+    part = models.ForeignKey(Parts, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='부품 시리얼')
+    product= models.ForeignKey(Product, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='제품 시리얼')
+    site_name = models.CharField(max_length=400, null=False, blank=False, editable=True, verbose_name='현장명')
+    num_floors = models.IntegerField(null=True, blank=True, editable=True, verbose_name='지상층')
+    num_basements = models.IntegerField(null=True, blank=True, editable=True, verbose_name='지하층')
+    instalation_date=models.DateField('설치일/최초설치일',null=True, blank=True, editable=True)
+    next_check_date=models.DateField('정밀안전검사예정일', null=True, blank=True, editable=True)
+    withdrawal_date=models.DateField('철거예정일', null=True, blank=True,editable=True )
+    safety_checker=models.CharField(max_length=200, verbose_name='안전관리자',null=True, blank=True,editable=True )
+    safety_checker_phone=models.CharField(max_length=200, verbose_name='안전관리자 연락처',null=True, blank=True,editable=True )
+    safety_edu_comp_date=models.DateField('안전교육 이수일', null=True, blank=True,editable=True )
+    management_company=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='유지관리업체')
+    management_comp_phone=models.CharField(max_length=200, verbose_name='유지관리업체 연락처', null=True, blank=True,editable=True )
+    subcontract_company=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='하도급/공동수급업체')
+    subcontract_comp_phone=models.CharField(max_length=200, verbose_name='하도급/공동수급업체 연락처',null=True, blank=True,editable=True )
+
+    class Meta:
+        db_table='contract'
+        ordering=['instalation_date','product', 'part']
+        constraints = [
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_part_or_product",
+                check=(
+                    models.Q(part__isnull=True,product__isnull=False)|
+                    models.Q(part__isnull=False,product__isnull=True)
+
+                ),
+            )
+        ]
+    

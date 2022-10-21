@@ -55,7 +55,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', #'django.db.backends.sqlite3',
-        'NAME': 'TEST_DB', #BASE_DIR / 'db.sqlite3',
+        'NAME': 'TEST_DB2', #BASE_DIR / 'db.sqlite3',
         'USER': 'jnb',
         'PASSWORD': 'jnbdrive-0922',
         'HOST': '127.0.0.1',

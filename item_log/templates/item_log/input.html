@@ -1,0 +1,201 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'item_log/table.css' %}">
+<body>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "4">건설용 리프트 정보 입력</th></p>
+            </tr>
+            <tr>
+                <td>건설용 리프트 모델명</td>
+                <td> 모델명 </td>
+                {% comment %} <td><input type="text" placeholder="시리얼을 입력하시오" size="20" style="width:100%; height:100%; border: 0;"></td> {% endcomment %}
+                <td>제작일</td>
+                <td><input type="text" placeholder="입력하시오" size="20" style="width:100%; height:100%; border: 0;"></td>
+            </tr>
+            <tr>
+                <td colspan ="4" height="30"></td>
+            </tr>
+            <tr>
+                <td>현장명</td>
+                <td><input type="text" placeholder="현장명" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>소재지</td>
+                <td><input type="text" placeholder="소재지" size="20" style="width:100%; height:100%; border: 0;"></td>
+            </tr>
+            <tr>
+                <td>제조업체</td>
+                <td>(주)제이앤비드라이브</td>
+                <td>리프트 번호</td>
+                <td>
+                    <select width="250px">
+                        {% if parts %}
+                            <ul>
+                            {% for part in parts %}
+                                <!-- <li><a href="/item_log/{{ log.item_id.item_id }}/{{ log.inspection_date|date:'Y-m-d' }}/detailed_inspection_history/">{{ log.item_id.item_id }} {{ log.inspection_date }}</a></li> -->
+                                <option value="{{ part.item_id }}"> {{ part.item_id }}</option>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p> 해당 부품에 대한 검사 이력이 없습니다.</p>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>적재하중</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>최대정원</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+            </tr>
+            <tr>
+                <td>운행구간</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>운행층수</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+            </tr>
+            <tr>
+                <td>지상층수</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>지하층수</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>		
+            </tr>
+            <tr>
+                <td>정격속도</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>최종검사일</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>		
+            </tr>
+            <tr>
+                <td>검사유효기간(보완기간)</td>
+                <td></td>
+                <td>설치일/최초설치일</td>
+                <td><input type="date"></td>		
+            </tr>
+            <tr>
+                <td>다음 정기검사주기</td>
+                <td></td>
+                <td>정밀안전검사예정일</td>
+                <td></td>		
+            </tr>
+        </table>
+    </div>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "4">관리 업체 정보</th></p>
+            </tr>
+            <tr>
+                <td>유지관리업체명</td>
+                {% comment %} <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td> {% endcomment %}
+                <td>
+                    <select name="업체명" style="width:250px">
+                        <option value="(주)동일"> (주)동일 </option>
+                        <option value="(주)동일"> (주)모비스 </option>
+                        <option value="(주)동일"> (주)삼성 </option>
+                        
+                    </select>
+                </td>
+                <td>유지관리업체 연락처</td>
+                <td></td>		
+            </tr>
+            <tr>
+                <td>하도급/공동수급 업체명</td>
+                <td></td>
+                <td>하도급/공동수급 연락처</td>
+                <td></td>		
+            </tr>
+            <tr>
+                <td>최종검사기관</td>
+                <td colspan = "3">
+                    <select name="검사기관" style="width:250px">
+                        <option value="(주)동일"> 대한산업안전협회 </option>
+                        <option value="(주)동일"> 국토부 </option>
+                        <option value="(주)동일"> 산자부 </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "6">보험 업체 정보</th></p>
+            </tr>
+            <tr>
+                <td>보험사명</td>
+                <td></td>
+                <td>보험상품명</td>
+                <td></td>		
+                <td>보험상품명</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "8">안전 관리자 정보</th></p>
+            </tr>
+            <tr>
+                <td>안전과리자명</td>
+                <td></td>
+                <td>안전관리자 연락처</td>
+                <td></td>		
+                <td>안전관리자 선임일</td>
+                <td></td>
+                <td>교육 이수일</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "12">검사이력</th></p>
+            </tr>
+            <tr>
+                <td>검사종류</td>
+                <td></td>
+                <td>검사일자</td>
+                <td></td>		
+                <td>운행유효기간</td>
+                <td></td>
+                <td>검사기관</td>
+                <td></td>
+                <td>검사원</td>
+                <td></td>
+                <td>합격유무</td>
+                <td>
+                    <select name="검사기관" style="width:100px">
+                        <option value="(주)동일"> 적합 </option>
+                        <option value="(주)동일"> 부적합 </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-outer"> 
+        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+        <table class="main">
+            <tr>
+                <p><th colspan = "12">고장이력</th></p>
+            </tr>
+            <tr>
+                <td>고장일시</td>
+                <td><input type="text" placeholder="고장일시" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>고장유형</td>
+                <td><input type="text" placeholder="고장유형" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>고장원인</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+                <td>구출기관</td>
+                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+<p><input stype="width=250px" type="button" value="저장"></p>

@@ -1,0 +1,52 @@
+/* Google Web Font */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.6em;
+    height: 100vh;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+body {
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+.main {
+    width: 1500px;
+    background-color: #fff;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.main tr{
+    border-bottom: 2px solid rgb(170, 170, 170);
+}
+
+.main tr:last-child{
+    border:none;
+}
+.main tr:nth-child(odd){
+    background-color: rgb(192, 199, 209);
+    border-left: 1px solid  rgb(255, 255, 255);
+}
+
+.main th, .main td{
+    padding: 16px;
+    font-size: 18px;
+    width: 250px;
+    text-align:center;
+    border-left: 1px solid  rgb(170, 170, 170);
+}
+
+.main tr th {
+    background-color: dodgerblue;
+    color: #fff;
+}

@@ -1,0 +1,5 @@
+<form action="{% url 'item_log:partscreateview' %}" method="post">
+    {% csrf_token %}
+    {{ sabi_form.as_table }}
+    <input type="submit" value="저장">
+</form>
