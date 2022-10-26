@@ -13,6 +13,9 @@
     <form class="form-subscribe" id="loginform" action="{% url 'item_log:user_login' %}" method='post'>
         {% csrf_token %}
         <!-- product serial address input-->
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
         <div class="row">
             <input class="form-control form-control-lg" id="username" type="text" name="username"  placeholder="아이디" />
         </div>  

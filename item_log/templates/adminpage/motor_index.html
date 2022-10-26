@@ -1,0 +1,36 @@
+{% extends 'adminpage/tables.html' %}
+{% block subtitle %}모터 리스트{% endblock %}
+{% block table_contents %}
+    <thead>
+        <tr>
+            <th>모터 시리얼</th>
+            <th>생산일</th>
+            <th>폐기일</th>
+            <th>조립된 모델</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>모터 시리얼</th>
+            <th>생산일</th>
+            <th>폐기일</th>
+            <th>조립된 모델</th>
+        </tr>
+    </tfoot>
+    <tbody>
+    {% for motor in motors %}
+        <tr>
+            <td>{{ motor.serial }}</td>
+            <td>{{ motor.production_date|date:'Y-m-d' }}</td>
+            <td>{{ motor.discard_date|date:'Y-m-d' }}</td>
+            <td>{{ motor.model_serial }}</td>
+        </tr>
+    {% empty %}
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+    {% endfor %} 
+    </tbody>
+
+{% endblock %}

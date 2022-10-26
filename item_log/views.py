@@ -12,7 +12,19 @@ from config import settings
 from .models import Parts, Motor, Break, Reducer, SafetyDevice
 # from .models import Item, Buyer, SalesHistory, InspectionLog
 
-class SaerchSystemLogoutView(LogoutView):
+
+class AdminPageView(LoginRequiredMixin, TemplateView):
+    login_url = settings.LOGIN_URL
+    template_name = 'adminpage/layout-static.html'
+
+# class AdminPageLoginView(LoginView):
+#     next_page = '/admin/'
+    
+class AdminPageLogoutView(LogoutView):
+    pass
+
+class SearchSystemLogoutView(LogoutView):
+    next_page='/login/'
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -20,7 +32,21 @@ class SaerchSystemLogoutView(LogoutView):
         context = super().post(request, *args, **kwargs)
         return super().post(request, *args, **kwargs)
 class SearchSystemLoginView(LoginView):
-    next_page = '/search/'
+    # redirect_field_name = 'next'
+    next_page='/search/'
+    # def get_default_redirect_url(self):
+    #     if self.redirect_field_name:
+    #         return self.get_redirect_url(self.next)
+    #     else:
+    #         return self.get_default_redirect_url(self)
+
+    def get(self, request, *args, **kwargs):
+        context = super().get(request, *args, **kwargs)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = super().post(request, *args, **kwargs)
+        return context
 
 
 
