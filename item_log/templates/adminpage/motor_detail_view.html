@@ -1,0 +1,22 @@
+{% extends 'adminpage/layout-static.html' %}
+{% block contents %}
+    <form action="" method="POST">
+   
+        {% csrf_token %}
+        {{ form.as_div }}
+        <div class="submit-row">
+            <div class="sumit-col">
+                <input type="submit" value="저장" name="save">
+                <input type="submit" value="취소" name="cancel">
+            </div>
+        </div>
+    </form>
+    <a href="{% url 'item_log:motor_delete_view' motor.serial %}"><button name="delete">삭제</button></a>
+    {% comment %} <form action="{% url 'item_log:motor_delete_view' motor.serial %}" method="GET">
+        {% csrf_token %}
+        <div class="summit-row">
+            <input type="submit" value="삭제" name="delete">
+        </div>
+    </form> {% endcomment %}
+        
+{% endblock %}

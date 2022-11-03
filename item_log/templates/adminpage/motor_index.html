@@ -1,12 +1,16 @@
 {% extends 'adminpage/tables.html' %}
 {% block subtitle %}모터 리스트{% endblock %}
+{% block parts_name %} 모터 {% endblock %}
 {% block table_contents %}
     <thead>
         <tr>
+            
             <th>모터 시리얼</th>
             <th>생산일</th>
             <th>폐기일</th>
             <th>조립된 모델</th>
+            <th>수정</th>
+            <th>삭제</th>
         </tr>
     </thead>
     <tfoot>
@@ -15,6 +19,8 @@
             <th>생산일</th>
             <th>폐기일</th>
             <th>조립된 모델</th>
+            <th>수정</th>
+            <th>삭제</th>
         </tr>
     </tfoot>
     <tbody>
@@ -24,8 +30,16 @@
             <td>{{ motor.production_date|date:'Y-m-d' }}</td>
             <td>{{ motor.discard_date|date:'Y-m-d' }}</td>
             <td>{{ motor.model_serial }}</td>
+            <td class="field-__str__"> 
+                <a href="{% url 'item_log:motor_detail_view' motor.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
+            </td>
+            <td> 
+                <a href="{% url 'item_log:motor_delete_view' motor.serial %}"><i class="fa-solid fa-trash-can"></i></a>
+            </td>
         </tr>
     {% empty %}
+        <td> </td>
+        <td> </td>
         <td> </td>
         <td> </td>
         <td> </td>

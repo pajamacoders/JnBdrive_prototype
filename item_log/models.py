@@ -1,6 +1,7 @@
 from xml.dom import ValidationErr
 
 from django.db import models
+from django.urls import reverse
 from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
@@ -91,6 +92,9 @@ class Motor(Parts):
     capacity = models.FloatField(verbose_name='용량') # 
     def __str__(self):
         return f'{self.motor_id}'
+
+    def get_absolute_url(self):
+        return reverse('item_log:motor_list')
 
     class Meta:
         db_table = 'motor'

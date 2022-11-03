@@ -1,0 +1,12 @@
+{% extends 'adminpage/layout-static.html' %}
+{% block contents %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <div class="submit-row">
+            <input type="submit" value="삭제" name="delete">
+            <input type="submit" value="저장" name="save">
+            <input type="submit" value="취소" name="cancel">
+        </div>
+    </form>
+{% endblock %}
