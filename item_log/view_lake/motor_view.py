@@ -1,4 +1,5 @@
 from django import forms
+from django import template
 from django.utils import timezone
 from django.views import generic, View
 from django.urls import reverse, reverse_lazy
@@ -9,6 +10,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from config import settings
 from item_log.models import Parts, Motor, PartsType
+# from .custom_mixin import GetVerboseNameMixin
 
 class MotorIndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'adminpage/motor_index.html'
@@ -33,13 +35,19 @@ class MotorUpdateForm(forms.ModelForm):
         if 'instance' in kwargs.keys():
             self.fields['serial'].disabled = True
         else:
+            # self.fields['serial'].required=False
             self.fields['category'].initial='모터'
+            # self.fields['capacity'].required=False
     class Meta:
         model = Motor
         fields = ['serial', 'category', 'production_date', 'discard_date', 'model_serial', 'capacity']
         widgets = {
-            'production_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date'}),
-            'discard_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date'}),
+            'serial':forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+            'category': forms.Select(attrs={'class':'form-select form-select-md mb-3'}),
+            'production_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date', 'class': 'form-control','id':'inputGroup-sizing-sm'}),
+            'discard_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date', 'class': 'form-control'}),
+            'model_serial': forms.Select(attrs={'class':'form-select form-select-md mb-3'}),
+            'capacity':forms.NumberInput(attrs={'class': 'form-control', 'id':"floatingInput"})
         }
 class MotorDetailView(LoginRequiredMixin, generic.DetailView):
     pk_url_kwarg='motor_id'
@@ -63,9 +71,6 @@ class MotorUpdateFormView(LoginRequiredMixin, UpdateView):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
 
-    # def get_success_url(self):
-    #     return reverse('item_log:motor_detail_view', kwargs={'motor_id': self.object.pk})
-
 class MotorView(View):
 
     def get(self, request, *args, **kwargs):
@@ -76,17 +81,6 @@ class MotorView(View):
         view = MotorUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-
-class MotorCreateForm(forms.ModelForm):
-    category = forms.ModelChoiceField(queryset=PartsType.objects.all())
-    category.initial='모터'
-    class Meta:
-        model = Motor
-        fields = ['serial', 'category', 'production_date', 'discard_date', 'model_serial', 'capacity']
-        widgets = {
-            'production_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date'}),
-            'discard_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date'}),
-        }
 class MotorCreateView(LoginRequiredMixin, CreateView):
     model = Motor
     fields = '__all__'
@@ -94,13 +88,15 @@ class MotorCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = MotorUpdateForm()#MotorCreateForm()
+        context['form'] = MotorUpdateForm()
         return context
-
-
 class MotorDeleteView(LoginRequiredMixin, DeleteView):
-    template_name="adminpage/motor_delete_view.html"
+    # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='motor_id'
     model = Motor
     success_url = reverse_lazy('item_log:motor_list')
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
     
+    def post(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)

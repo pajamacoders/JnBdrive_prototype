@@ -1,22 +1,27 @@
 {% extends 'adminpage/layout-static.html' %}
 {% block contents %}
+    
     <form action="" method="POST">
-   
         {% csrf_token %}
-        {{ form.as_div }}
-        <div class="submit-row">
-            <div class="sumit-col">
-                <input type="submit" value="저장" name="save">
-                <input type="submit" value="취소" name="cancel">
+        <div class="container" style='position:absolute; top:5%; left:5%; float: none; margin: 100 auto'>    
+            <div class="row">
+                <div class="mb-3 align-items-center">
+                    {% for field in form %}
+                    <div class="form-label">
+                        {{ field.label }}: {{ field }}
+                    </div>
+                    {% endfor %}
+                    {% comment %} {{ form.as_div }}  {% endcomment %}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="sumit-col">
+                        <input type="submit" class="btn btn-dark" value="저장" name="save">
+                        <input type="submit" class="btn btn-dark" value="취소" name="cancel">
+                        <a href="{% url 'item_log:motor_delete_view' motor.serial %}"><input type="submit" class="btn btn-dark" value="삭제" name="delete"></a>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
-    <a href="{% url 'item_log:motor_delete_view' motor.serial %}"><button name="delete">삭제</button></a>
-    {% comment %} <form action="{% url 'item_log:motor_delete_view' motor.serial %}" method="GET">
-        {% csrf_token %}
-        <div class="summit-row">
-            <input type="submit" value="삭제" name="delete">
-        </div>
-    </form> {% endcomment %}
-        
+            
 {% endblock %}
