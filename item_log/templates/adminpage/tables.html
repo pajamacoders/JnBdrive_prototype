@@ -64,8 +64,8 @@
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{% url 'item_log:motor_list' %}">모터</a>
-                                    <a class="nav-link" href="layout-static.html">브레이크</a>
-                                    <a class="nav-link" href="layout-static.html">감속기</a>
+                                    <a class="nav-link" href="{% url 'item_log:break_list' %}">브레이크</a>
+                                    <a class="nav-link" href="{% url 'item_log:reducer_list' %}">감속기</a>
                                     <a class="nav-link" href="layout-static.html">안전장치(가바나)</a>
                                     <a class="nav-link" href="layout-static.html">복합제품</a>
                                     <a class="nav-link" href="layout-static.html">자체점검 이력</a>
@@ -141,7 +141,8 @@
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <div class="col"><a href="{% url 'item_log:motor_create' %}"><i class="fa-solid fa-circle-plus"></i>{% block parts_name %} {% endblock %} 추가</a></div>
+                                {% block create_form_link %}
+                                {% endblock%}
                             </div>
                             <div class="card-body">
                                 <table id="example" class="display nowrap" style="width:100%">

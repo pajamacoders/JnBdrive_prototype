@@ -78,13 +78,16 @@ class Parts(models.Model):
         
 
 class Reducer(Parts):
-    recuder_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='감속기 시리얼')
+    reducer_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='감속기 시리얼')
     gear_ratio = models.FloatField(verbose_name='감속비') # 
     def __str__(self):
-        return f'{self.recuder_id}'
+        return f'{self.reducer_id}'
+    
+    def get_absolute_url(self):
+        return reverse('item_log:reducer_list')
     class Meta:
         db_table = 'reducers'
-        ordering=['recuder_id']
+        ordering=['reducer_id']
         
 
 class Motor(Parts):
@@ -106,6 +109,9 @@ class Break(Parts):
     def __str__(self):
         return f'{self.break_id}'
 
+    def get_absolute_url(self):
+        return reverse('item_log:break_list')
+
     class Meta:
         db_table = 'breaks'
         ordering=['break_id']
@@ -115,6 +121,9 @@ class SafetyDevice(Parts):
     capacity = models.FloatField(verbose_name='용량') # 
     def __str__(self):
         return f'{self.safety_device_id}'
+
+    def get_absolute_url(self):
+        return reverse('item_log:safety_device_list')
 
     class Meta:
         db_table = 'safety_devices'

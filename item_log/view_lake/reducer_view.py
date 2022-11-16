@@ -3,14 +3,14 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from item_log.models import Motor
-from item_log.form_lake.motor_form import MotorUpdateForm
+from item_log.models import Reducer
+from item_log.form_lake.reducer_form import ReducerUpdateForm
 
-class MotorIndexView(LoginRequiredMixin, generic.ListView):
-    template_name = 'adminpage/motor_index.html'
-    model = Motor
+class ReducerIndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'adminpage/reducer_index.html'
+    model = Reducer
     paginate_by = 20
-    context_object_name = 'motors'
+    context_object_name = 'reducers'
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -21,22 +21,22 @@ class MotorIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class MotorDetailView(LoginRequiredMixin, generic.DetailView):
-    pk_url_kwarg='motor_id'
-    model = Motor
-    template_name = 'adminpage/motor_detail_view.html'
+class ReducerDetailView(LoginRequiredMixin, generic.DetailView):
+    pk_url_kwarg='reducer_id'
+    model = Reducer
+    template_name = 'adminpage/reducer_detail_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = MotorUpdateForm(instance=self.model.objects.get(pk=self.kwargs['motor_id']))
+        context['form'] = ReducerUpdateForm(instance=self.model.objects.get(pk=self.kwargs['reducer_id']))
         return context
 
 
-class MotorUpdateFormView(LoginRequiredMixin, UpdateView):
-    template_name = 'adminpage/motor_detail_view.html'
-    form_class = MotorUpdateForm
-    model = Motor
-    pk_url_kwarg='motor_id'
+class ReducerUpdateFormView(LoginRequiredMixin, UpdateView):
+    template_name = 'adminpage/reducer_detail_view.html'
+    form_class = ReducerUpdateForm
+    model = Reducer
+    pk_url_kwarg='reducer_id'
     def post(self, request, *args, **kwargs):
       
         if not request.user.is_authenticated:
@@ -46,29 +46,31 @@ class MotorUpdateFormView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-class MotorView(View):
+class ReducerView(View):
 
     def get(self, request, *args, **kwargs):
-        view = MotorDetailView.as_view()
+        view = ReducerDetailView.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        view = MotorUpdateFormView.as_view()
+        view = ReducerUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class MotorCreateView(LoginRequiredMixin, CreateView):
-    model = Motor
+class ReducerCreateView(LoginRequiredMixin, CreateView):
+    model = Reducer
     fields = '__all__'
-    template_name = 'adminpage/motor_create_view.html'
+    template_name = 'adminpage/reducer_create_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = MotorUpdateForm()
+        context['form'] = ReducerUpdateForm()
         return context
-class MotorDeleteView(LoginRequiredMixin, DeleteView):
-    pk_url_kwarg='motor_id'
-    model = Motor
-    success_url = reverse_lazy('item_log:motor_list')
+
+class ReducerDeleteView(LoginRequiredMixin, DeleteView):
+    # template_name="adminpage/motor_delete_view.html"
+    pk_url_kwarg='reducer_id'
+    model = Reducer
+    success_url = reverse_lazy('item_log:reducer_list')
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
