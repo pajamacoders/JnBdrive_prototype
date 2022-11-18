@@ -20,6 +20,9 @@ class ModelType(models.Model):
     rated_speed = models.IntegerField(default=0, verbose_name='정격속도')
     def __str__(self):
         return f'{self.model}'
+
+    def get_absolute_url(self):
+        return reverse('item_log:model_type_list')
     class Meta:
         db_table = 'modeltype'
         ordering=['model']
@@ -38,6 +41,10 @@ class ProductionCompany(models.Model):
     end_date=models.DateField('보장기간 종료시점', null=True, blank=True, editable=True)
     def __str__(self):
         return f'{self.name}:{self.business_number}'
+
+
+    def get_absolute_url(self):
+        return reverse('item_log:production_company_list')
     class Meta:
         db_table = 'production_company'
         ordering=['business_number']
@@ -57,9 +64,12 @@ class Product(models.Model):
         
 
 class PartsType(models.Model):
-    name=models.CharField(max_length=200, primary_key=True, null=False, blank=False, editable=True, verbose_name='부품명')
+    name=models.CharField(max_length=200,  primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='부품명')
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('item_log:parts_type_list')
     class Meta:
         ordering=['name']
 
@@ -157,20 +167,28 @@ class FaultHistory(models.Model):
     cause=models.TextField(verbose_name='고장원인')
     repair_company=models.CharField(max_length=200, verbose_name='구출기관')
     parts=models.ForeignKey(Parts, null=False, blank=False, on_delete=models.CASCADE, verbose_name='부품 시리얼')
+    
     def __str__(self):
         return f'{self.date}: {self.parts}, 이력: {self.fault_type} '
 
+    def get_absolute_url(self):
+        return reverse('item_log:fault_history_list')
     class Meta:
         db_table='fault_history'
         ordering=['date', 'parts']
 
 class CheckCompany(models.Model):
     name=models.CharField(max_length=200, null=False, blank=False, editable=True, verbose_name='검사기관')
+
+    def get_absolute_url(self):
+        return reverse('item_log:check_company_list')
+    
+    def __str__(self):
+        return f'{self.name}'
     class Meta:
         db_table='check_company'
         ordering=['name']
-        def __str__(self):
-            return f'{self.name}'
+
 
 
 class CheckHistory(models.Model):
@@ -184,6 +202,8 @@ class CheckHistory(models.Model):
     part=models.ForeignKey(Parts, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='부품 시리얼')
     product=models.ForeignKey(Product, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='제품 시리얼')
     
+    def get_absolute_url(self):
+        return reverse('item_log:check_history_list')
     class Meta:
         db_table='check_history'
         ordering=['date','product', 'part']
@@ -195,6 +215,7 @@ class CheckHistory(models.Model):
                     models.Q(part__isnull=False,product__isnull=True)
 
                 ),
+                violation_error_message="부품이나 제품 중 하나만 선택가능합니다."
             )
         ]
 
@@ -217,6 +238,8 @@ class Contract(models.Model):
     subcontract_company=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='하도급/공동수급업체')
     subcontract_comp_phone=models.CharField(max_length=200, verbose_name='하도급/공동수급업체 연락처',null=True, blank=True,editable=True )
 
+    def get_absolute_url(self):
+        return reverse('item_log:contract_list')
     class Meta:
         db_table='contract'
         ordering=['instalation_date','product', 'part']

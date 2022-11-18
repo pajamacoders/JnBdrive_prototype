@@ -15,7 +15,7 @@ from .models import Parts, Motor, Break, Reducer, SafetyDevice
 
 class AdminPageView(LoginRequiredMixin, TemplateView):
     login_url = settings.LOGIN_URL
-    template_name = 'adminpage/layout-static.html'
+    template_name = 'adminpage/test.html'#'adminpage/layout-static.html'
 
 # class AdminPageLoginView(LoginView):
 #     next_page = '/admin/'

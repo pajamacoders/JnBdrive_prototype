@@ -1,0 +1,26 @@
+{% extends 'adminpage/layout-static.html' %}
+{% load static %}
+{% block contents %}
+    <div class="container" style='position:absolute; top:5%; left:5%; float: none; margin: 100 auto; min-height: 100%;'>    
+        <form action="" method="POST" accept-charset="utf-8">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 align-items-center">
+                    {% for field in form %}
+                    <div class="form-label">
+                        {{ field.label }}: {{ field }}
+                    </div>
+                    {% endfor %}
+                    {% comment %} {{ form.as_div }}  {% endcomment %}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="sumit-col">
+                        <input type="submit" class="btn btn-dark" value="저장" name="save">
+                        <input type="submit" class="btn btn-dark" value="취소" name="cancel">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+            
+{% endblock %}

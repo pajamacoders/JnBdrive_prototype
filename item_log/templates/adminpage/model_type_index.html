@@ -1,0 +1,82 @@
+
+{% extends 'adminpage/tables.html' %}
+{% load static %}
+{% block subtitle %}모델 리스트{% endblock %}
+{% block create_form_link %}
+<div class="col"><a href="{% url 'item_log:model_type_create' %}"><i class="fa-solid fa-circle-plus"></i>모델 추가</a></div>
+{% endblock %}
+{% block table_contents %}
+    <thead>
+        <tr>
+            
+            <th>모델 시리얼</th>
+            <th>제품 타입</th>
+            <th>적재하중</th>
+            <th>운행구간</th>
+            <th>최대정원</th>
+            <th>정격속도</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>모델 시리얼</th>
+            <th>제품 타입</th>
+            <th>적재하중</th>
+            <th>운행구간</th>
+            <th>최대정원</th>
+            <th>정격속도</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+    </tfoot>
+    <tbody>
+    {% for model in model_types %}
+        <tr>
+            <td>{{ model.model }}</td>
+            <td>{{ model.type }}</td>
+            <td>{{ model.load_weight }}</td>
+            <td>{{ model.operation_section }}</td>
+            <td>{{ model.capacity }}</td>
+            <td>{{ model.rated_speed }}</td>
+            <td class="field-__str__"> 
+                <a href="{% url 'item_log:model_type_detail_view' model.model %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
+            </td>
+            <td> 
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#delete_modal" data-bs-id="{{ model.model }}" data-bs-type="" data-bs-todo="{% url 'item_log:model_type_delete_view' model.model %}"><i class="fa-solid fa-trash-can"></i></button>
+            </td>
+        </tr>
+    {% empty %}
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+    {% endfor %} 
+    </tbody>
+    
+    <!-- Modal -->
+    <div class="modal" id="delete_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">삭제확인</h5>
+            </div>
+            <div class="modal-body">
+                body-text
+            </div>
+            <div class="modal-footer">
+                <a href=""><button type="button" class="btn btn-primary btn-lg">삭제</button></a>
+                <button type="button" class="btn btn-dark btn-lg" data-bs-dismiss="modal">취소</button>
+            
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'adminpage/js/delete_confirm_modal.js' %}"></script>
+{% endblock %}

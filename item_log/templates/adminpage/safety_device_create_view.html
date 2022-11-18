@@ -1,0 +1,20 @@
+{% extends 'adminpage/layout-static.html' %}
+{% block contents %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="container" style="position:absolute; top:5%; left:5%; float: none; margin: 100 auto">
+            <div class="row">
+                <div class="mb-3 align-items-center">
+                {{ form.as_div }}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="sumit-col">
+                        <input type="submit" class="btn btn-dark" value="저장" name="save">
+                        <a href="{% url 'item_log:safety_device_list' %}"  class="btn btn-dark">취소</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+{% endblock %}
