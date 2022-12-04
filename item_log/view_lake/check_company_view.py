@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import CheckCompany
 from item_log.form_lake.check_company_form import CheckCompanyUpdateForm
-
-class CheckCompanyIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class CheckCompanyIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/check_company_index.html'
     model = CheckCompany
     paginate_by = 20
@@ -21,7 +21,7 @@ class CheckCompanyIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class CheckCompanyDetailView(LoginRequiredMixin, generic.DetailView):
+class CheckCompanyDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='id'
     model = CheckCompany
     template_name = 'adminpage/check_company_detail_view.html'
@@ -32,7 +32,7 @@ class CheckCompanyDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class CheckCompanyUpdateFormView(LoginRequiredMixin, UpdateView):
+class CheckCompanyUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/check_company_detail_view.html'
     form_class = CheckCompanyUpdateForm
     model = CheckCompany
@@ -56,7 +56,7 @@ class CheckCompanyView(View):
         view = CheckCompanyUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class CheckCompanyCreateView(LoginRequiredMixin, CreateView):
+class CheckCompanyCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = CheckCompany
     fields = '__all__'
     template_name = 'adminpage/check_company_create_view.html'
@@ -66,7 +66,7 @@ class CheckCompanyCreateView(LoginRequiredMixin, CreateView):
         context['form'] = CheckCompanyUpdateForm()
         return context
 
-class CheckCompanyDeleteView(LoginRequiredMixin, DeleteView):
+class CheckCompanyDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='id'
     model = CheckCompany

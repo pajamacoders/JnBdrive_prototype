@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import PartsType
 from item_log.form_lake.parts_type_form import PartsTypeUpdateForm
-
-class PartsTypeIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class PartsTypeIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/parts_type_index.html'
     model = PartsType
     paginate_by = 20
@@ -21,7 +21,7 @@ class PartsTypeIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class PartsTypeDetailView(LoginRequiredMixin, generic.DetailView):
+class PartsTypeDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='name'
     model = PartsType
     template_name = 'adminpage/parts_type_detail_view.html'
@@ -32,7 +32,7 @@ class PartsTypeDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class PartsTypeUpdateFormView(LoginRequiredMixin, UpdateView):
+class PartsTypeUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/parts_type_detail_view.html'
     form_class = PartsTypeUpdateForm
     model = PartsType
@@ -56,7 +56,7 @@ class PartsTypeView(View):
         view = PartsTypeUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class PartsTypeCreateView(LoginRequiredMixin, CreateView):
+class PartsTypeCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = PartsType
     fields = '__all__'
     template_name = 'adminpage/parts_type_create_view.html'
@@ -66,7 +66,7 @@ class PartsTypeCreateView(LoginRequiredMixin, CreateView):
         context['form'] = PartsTypeUpdateForm()
         return context
 
-class PartsTypeDeleteView(LoginRequiredMixin, DeleteView):
+class PartsTypeDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='name'
     model = PartsType

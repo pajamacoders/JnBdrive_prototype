@@ -1,7 +1,6 @@
 from django.urls import path
 
 from . import views
-from .view_lake.parts_view import *
 from .view_lake.motor_view import *
 from .view_lake.break_view import *
 from .view_lake.reducer_view import *
@@ -13,9 +12,10 @@ from .view_lake.check_company_view import *
 from .view_lake.check_history_view import *
 from .view_lake.fault_history_view import *
 from .view_lake.contract_view import *
+from .view_lake.product_view import *
+from .view_lake.user_view import *
 app_name = 'item_log'
 urlpatterns=[
-    path('', views.IndexView.as_view(), name='index'),
     path('login/', views.SearchSystemLoginView.as_view(template_name='item_log/login.html'), name='user_login'),
     path('logout/', views.SearchSystemLogoutView.as_view(template_name='item_log/login.html'), name='user_logout'),
     path('search/', views.ProductSearchView.as_view(),name='product_search'),
@@ -76,4 +76,15 @@ urlpatterns=[
     path('admin/contract/create', ContractCreateView.as_view(), name='contract_create'),
     path('admin/contract/<int:id>/detail', ContractView.as_view(), name='contract_detail_view'),
     path('admin/contract/<int:id>/delete', ContractDeleteView.as_view(), name='contract_delete_view'),
+    #product
+    path('admin/parts/product/lists', ProductIndexView.as_view(), name='product_list'),
+    path('admin/product/create', ProductCreateView.as_view(), name='product_create'),
+    path('admin/product/<str:serial>/detail', ProductView.as_view(), name='product_detail_view'),
+    path('admin/product/<str:serial>/delete', ProductDeleteView.as_view(), name='product_delete_view'),
+
+    #product
+    path('admin/user/lists', UserIndexView.as_view(), name='user_list'),
+    path('admin/user/create', UserCreateView.as_view(), name='user_create'),
+    path('admin/user/<int:id>/detail', UserView.as_view(), name='user_detail_view'),
+    path('admin/user/<int:id>/delete', UserDeleteView.as_view(), name='user_delete_view'),
     ]

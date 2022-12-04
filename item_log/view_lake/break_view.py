@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import Break
 from item_log.form_lake.break_form import BreakUpdateForm
+from item_log.view_lake.authority_test  import AuthorityTestMixin
 
-class BreakIndexView(LoginRequiredMixin, generic.ListView):
+class BreakIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/break_index.html'
     model = Break
     paginate_by = 20
@@ -21,7 +22,7 @@ class BreakIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class BreakDetailView(LoginRequiredMixin, generic.DetailView):
+class BreakDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='break_id'
     model = Break
     template_name = 'adminpage/break_detail_view.html'
@@ -32,7 +33,7 @@ class BreakDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class BreakUpdateFormView(LoginRequiredMixin, UpdateView):
+class BreakUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/break_detail_view.html'
     form_class = BreakUpdateForm
     model = Break
@@ -56,7 +57,7 @@ class BreakView(View):
         view = BreakUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class BreakCreateView(LoginRequiredMixin, CreateView):
+class BreakCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = Break
     fields = '__all__'
     template_name = 'adminpage/break_create_view.html'
@@ -66,7 +67,7 @@ class BreakCreateView(LoginRequiredMixin, CreateView):
         context['form'] = BreakUpdateForm()
         return context
 
-class BreakDeleteView(LoginRequiredMixin, DeleteView):
+class BreakDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='break_id'
     model = Break

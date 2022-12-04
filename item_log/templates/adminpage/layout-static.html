@@ -50,7 +50,7 @@
                             <div class="sb-sidenav-menu-heading">종합</div>
                             <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
+                                대시보드
                             </a>
                             <div class="sb-sidenav-menu-heading">관리</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
@@ -65,7 +65,8 @@
                                     <a class="nav-link" href="{% url 'item_log:break_list' %}">브레이크</a>
                                     <a class="nav-link" href="{% url 'item_log:reducer_list' %}">감속기</a>
                                     <a class="nav-link" href="{% url 'item_log:safety_device_list' %}">안전장치(가바나)</a>
-                                    <a class="nav-link" href="{% url 'item_log:model_type_list' %}">복합제품</a>
+                                    <a class="nav-link" href="{% url 'item_log:model_type_list' %}">모델</a>
+                                    <a class="nav-link" href="{% url 'item_log:product_list' %}">제품</a>
                                     <a class="nav-link" href="{% url 'item_log:contract_list' %}">현장정보</a>
                                     <a class="nav-link" href="{% url 'item_log:check_company_list' %}">최종검사기관</a>
                                     <a class="nav-link" href="{% url 'item_log:production_company_list' %}">제조업체</a>
@@ -87,9 +88,9 @@
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
+                                            {% comment %} <a class="nav-link" href="login.html">Login</a> {% endcomment %}
+                                            <a class="nav-link" href="{% url 'item_log:user_list' %}">직원 추가</a>
+                                            {% comment %} <a class="nav-link" href="password.html">Forgot Password</a> {% endcomment %}
                                         </nav>
                                     </div>
                                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">

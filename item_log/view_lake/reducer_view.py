@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import Reducer
 from item_log.form_lake.reducer_form import ReducerUpdateForm
-
-class ReducerIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class ReducerIndexView(LoginRequiredMixin,  AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/reducer_index.html'
     model = Reducer
     paginate_by = 20
@@ -21,7 +21,7 @@ class ReducerIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class ReducerDetailView(LoginRequiredMixin, generic.DetailView):
+class ReducerDetailView(LoginRequiredMixin,  AuthorityTestMixin,  generic.DetailView):
     pk_url_kwarg='reducer_id'
     model = Reducer
     template_name = 'adminpage/reducer_detail_view.html'
@@ -32,7 +32,7 @@ class ReducerDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class ReducerUpdateFormView(LoginRequiredMixin, UpdateView):
+class ReducerUpdateFormView(LoginRequiredMixin,  AuthorityTestMixin,  UpdateView):
     template_name = 'adminpage/reducer_detail_view.html'
     form_class = ReducerUpdateForm
     model = Reducer
@@ -56,7 +56,7 @@ class ReducerView(View):
         view = ReducerUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class ReducerCreateView(LoginRequiredMixin, CreateView):
+class ReducerCreateView(LoginRequiredMixin,  AuthorityTestMixin,  CreateView):
     model = Reducer
     fields = '__all__'
     template_name = 'adminpage/reducer_create_view.html'
@@ -66,7 +66,7 @@ class ReducerCreateView(LoginRequiredMixin, CreateView):
         context['form'] = ReducerUpdateForm()
         return context
 
-class ReducerDeleteView(LoginRequiredMixin, DeleteView):
+class ReducerDeleteView(LoginRequiredMixin,  AuthorityTestMixin,  DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='reducer_id'
     model = Reducer

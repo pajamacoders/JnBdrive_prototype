@@ -3,14 +3,14 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from item_log.models import FaultHistory
-from item_log.form_lake.fault_history_form import FaultHistoryUpdateForm
+from item_log.models import Product
+from item_log.form_lake.product_form import ProductUpdateForm
 from item_log.view_lake.authority_test  import AuthorityTestMixin
-class FaultHistoryIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
-    template_name = 'adminpage/fault_history_index.html'
-    model = FaultHistory
+class ProductIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
+    template_name = 'adminpage/product_index.html'
+    model = Product
     paginate_by = 20
-    context_object_name = 'fault_histories'
+    context_object_name = 'products'
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -21,22 +21,22 @@ class FaultHistoryIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.List
         query_set = super().get_queryset()
         return query_set
 
-class FaultHistoryDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
-    pk_url_kwarg='id'
-    model = FaultHistory
-    template_name = 'adminpage/fault_history_detail_view.html'
+class ProductDetailView(LoginRequiredMixin,  AuthorityTestMixin, generic.DetailView):
+    pk_url_kwarg='serial'
+    model = Product
+    template_name = 'adminpage/product_detail_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = FaultHistoryUpdateForm(instance=self.model.objects.get(pk=self.kwargs['id']))
+        context['form'] = ProductUpdateForm(instance=self.model.objects.get(pk=self.kwargs['serial']))
         return context
 
 
-class FaultHistoryUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
-    template_name = 'adminpage/fault_history_detail_view.html'
-    form_class = FaultHistoryUpdateForm
-    model = FaultHistory
-    pk_url_kwarg='id'
+class ProductUpdateFormView(LoginRequiredMixin,  AuthorityTestMixin, UpdateView):
+    template_name = 'adminpage/product_detail_view.html'
+    form_class = ProductUpdateForm
+    model = Product
+    pk_url_kwarg='model'
     def post(self, request, *args, **kwargs):
       
         if not request.user.is_authenticated:
@@ -46,32 +46,31 @@ class FaultHistoryUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateV
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-class FaultHistoryView(View):
+class ProductView(View):
 
     def get(self, request, *args, **kwargs):
-        view = FaultHistoryDetailView.as_view()
+        view = ProductDetailView.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        view = FaultHistoryUpdateFormView.as_view()
+        view = ProductUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class FaultHistoryCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
-    model = FaultHistory
+class ProductCreateView(LoginRequiredMixin,  AuthorityTestMixin,  CreateView):
+    model = Product
     fields = '__all__'
-    template_name = 'adminpage/fault_history_create_view.html'
+    template_name = 'adminpage/product_create_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = FaultHistoryUpdateForm()
+        context['form'] = ProductUpdateForm()
         return context
 
-
-
-class FaultHistoryDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
-    pk_url_kwarg='id'
-    model = FaultHistory
-    success_url = reverse_lazy('item_log:fault_history_list')
+class ProductDeleteView(LoginRequiredMixin,  AuthorityTestMixin,  DeleteView):
+    # template_name="adminpage/motor_delete_view.html"
+    pk_url_kwarg='serial'
+    model = Product
+    success_url = reverse_lazy('item_log:product_list')
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()

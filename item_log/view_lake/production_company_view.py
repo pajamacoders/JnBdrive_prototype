@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import ProductionCompany
 from item_log.form_lake.production_company_form import ProductionCompanyUpdateForm
-
-class ProductionCompanyIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class ProductionCompanyIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/production_company_index.html'
     model = ProductionCompany
     paginate_by = 20
@@ -21,7 +21,7 @@ class ProductionCompanyIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class ProductionCompanyDetailView(LoginRequiredMixin, generic.DetailView):
+class ProductionCompanyDetailView(LoginRequiredMixin, AuthorityTestMixin,  generic.DetailView):
     pk_url_kwarg='business_number'
     model = ProductionCompany
     template_name = 'adminpage/production_company_detail_view.html'
@@ -32,7 +32,7 @@ class ProductionCompanyDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class ProductionCompanyUpdateFormView(LoginRequiredMixin, UpdateView):
+class ProductionCompanyUpdateFormView(LoginRequiredMixin, AuthorityTestMixin,  UpdateView):
     template_name = 'adminpage/production_company_detail_view.html'
     form_class = ProductionCompanyUpdateForm
     model = ProductionCompany
@@ -56,7 +56,7 @@ class ProductionCompanyView(View):
         view = ProductionCompanyUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class ProductionCompanyCreateView(LoginRequiredMixin, CreateView):
+class ProductionCompanyCreateView(LoginRequiredMixin,  AuthorityTestMixin, CreateView):
     model = ProductionCompany
     fields = '__all__'
     template_name = 'adminpage/production_company_create_view.html'
@@ -66,7 +66,7 @@ class ProductionCompanyCreateView(LoginRequiredMixin, CreateView):
         context['form'] = ProductionCompanyUpdateForm()
         return context
 
-class ProductionCompanyDeleteView(LoginRequiredMixin, DeleteView):
+class ProductionCompanyDeleteView(LoginRequiredMixin, AuthorityTestMixin,  DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='business_number'
     model = ProductionCompany

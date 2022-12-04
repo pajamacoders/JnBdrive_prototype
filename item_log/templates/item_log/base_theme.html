@@ -22,12 +22,15 @@
             <div class="container">
                 <a class="navbar-brand" href="#!">JNB드라이브 제품 관리 시스템</a>
                 <div class='col-2'>
-                    {% if user.is_authenticated %}
+                    {% if user.is_active %}
                     <a class="btn btn-primary" href="{% url 'item_log:user_logout' %}">로그아웃</a>
                     {% else %}
                     <a class="btn btn-primary" href="{% url 'item_log:user_login' %}">로그인</a>
                     {% endif %}
+                    
+                    {% if user.is_staff %}
                     <a class="btn btn-primary" href="/admin/">관리 페이지</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import Motor
 from item_log.form_lake.motor_form import MotorUpdateForm
-
-class MotorIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class MotorIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/motor_index.html'
     model = Motor
     paginate_by = 20
@@ -21,7 +21,7 @@ class MotorIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class MotorDetailView(LoginRequiredMixin, generic.DetailView):
+class MotorDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='motor_id'
     model = Motor
     template_name = 'adminpage/motor_detail_view.html'
@@ -32,7 +32,7 @@ class MotorDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class MotorUpdateFormView(LoginRequiredMixin, UpdateView):
+class MotorUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/motor_detail_view.html'
     form_class = MotorUpdateForm
     model = Motor
@@ -56,7 +56,7 @@ class MotorView(View):
         view = MotorUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class MotorCreateView(LoginRequiredMixin, CreateView):
+class MotorCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = Motor
     fields = '__all__'
     template_name = 'adminpage/motor_create_view.html'
@@ -65,7 +65,7 @@ class MotorCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['form'] = MotorUpdateForm()
         return context
-class MotorDeleteView(LoginRequiredMixin, DeleteView):
+class MotorDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     pk_url_kwarg='motor_id'
     model = Motor
     success_url = reverse_lazy('item_log:motor_list')

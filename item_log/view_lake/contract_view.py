@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import Contract
 from item_log.form_lake.contract_form import ContractUpdateForm
-
-class ContractIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class ContractIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/contract_index.html'
     model = Contract
     paginate_by = 20
@@ -21,7 +21,7 @@ class ContractIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class ContractDetailView(LoginRequiredMixin, generic.DetailView):
+class ContractDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='id'
     model = Contract
     template_name = 'adminpage/contract_detail_view.html'
@@ -32,7 +32,7 @@ class ContractDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class ContractUpdateFormView(LoginRequiredMixin, UpdateView):
+class ContractUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/contract_detail_view.html'
     form_class = ContractUpdateForm
     model = Contract
@@ -56,7 +56,7 @@ class ContractView(View):
         view = ContractUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class ContractCreateView(LoginRequiredMixin, CreateView):
+class ContractCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = Contract
     fields = '__all__'
     template_name = 'adminpage/contract_create_view.html'
@@ -66,7 +66,7 @@ class ContractCreateView(LoginRequiredMixin, CreateView):
         context['form'] = ContractUpdateForm()
         return context
 
-class ContractDeleteView(LoginRequiredMixin, DeleteView):
+class ContractDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='id'
     model = Contract

@@ -1,49 +1,51 @@
 
 {% extends 'adminpage/tables.html' %}
 {% load static %}
-{% block subtitle %}감속기 리스트{% endblock %}
+{% block subtitle %}제품 리스트{% endblock %}
 {% block create_form_link %}
-<div class="col"><a href="{% url 'item_log:reducer_create' %}"><i class="fa-solid fa-circle-plus"></i>감속기 추가</a></div>
+<div class="col"><a href="{% url 'item_log:product_create' %}"><i class="fa-solid fa-circle-plus"></i>제품 추가</a></div>
 {% endblock %}
 {% block table_contents %}
     <thead>
         <tr>
-            <th>감속기 제품명</th>
-            <th>감속기 시리얼</th>
-            <th>생산일</th>
+            <th>모델</th>
+            <th>안전인증번호</th>
+            <th>제조업체</th>
+            <th>제조일</th>
             <th>폐기일</th>
-            <th>조립된 모델</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th>감속기 제품명</th>
-            <th>감속기 시리얼</th>
-            <th>생산일</th>
+            <th>모델</th>
+            <th>안전인증번호</th>
+            <th>제조업체</th>
+            <th>제조일</th>
             <th>폐기일</th>
-            <th>조립된 모델</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
     </tfoot>
     <tbody>
-    {% for reducer in reducers %}
+    {% for product in products %}
         <tr>
-            <td>이름</td>
-            <td>{{ reducer.serial }}</td>
-            <td>{{ reducer.production_date|date:'Y-m-d' }}</td>
-            <td>{{ reducer.discard_date|date:'Y-m-d' }}</td>
-            <td>{{ reducer.model_serial }}</td>
-            <td class="field-__str__"> 
-                <a href="{% url 'item_log:reducer_detail_view' reducer.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
+            <td>{{ product.model }}</td>
+            <td>{{ product.serial }}</td>
+            <td>{{ product.production_company }}</td>
+            <td>{{ product.production_date }}</td>
+            <td>{{ product.discard_date }}</td>
+            <td> 
+                <a href="{% url 'item_log:product_detail_view' product.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
             </td>
             <td> 
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#delete_modal" data-bs-id="{{ reducer.serial }}" data-bs-type="{{ reducer.category }}" data-bs-todo="{% url 'item_log:reducer_delete_view' reducer.serial %}"><i class="fa-solid fa-trash-can"></i></button>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#delete_modal" data-bs-id="{{ product.serial }}" data-bs-type="{{ product.model }}" data-bs-todo="{% url 'item_log:product_delete_view' product.serial %}"><i class="fa-solid fa-trash-can"></i></button>
             </td>
         </tr>
     {% empty %}
+        <td> </td>
+        <td> </td>
         <td> </td>
         <td> </td>
         <td> </td>

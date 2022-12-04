@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import ModelType
 from item_log.form_lake.modeltype_form import ModelTypeUpdateForm
-
-class ModelTypeIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class ModelTypeIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/model_type_index.html'
     model = ModelType
     paginate_by = 20
@@ -21,7 +21,7 @@ class ModelTypeIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class ModelTypeDetailView(LoginRequiredMixin, generic.DetailView):
+class ModelTypeDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='model'
     model = ModelType
     template_name = 'adminpage/model_type_detail_view.html'
@@ -32,7 +32,7 @@ class ModelTypeDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class ModelTypeUpdateFormView(LoginRequiredMixin, UpdateView):
+class ModelTypeUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/model_type_detail_view.html'
     form_class = ModelTypeUpdateForm
     model = ModelType
@@ -56,7 +56,7 @@ class ModelTypeView(View):
         view = ModelTypeUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class ModelTypeCreateView(LoginRequiredMixin, CreateView):
+class ModelTypeCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = ModelType
     fields = '__all__'
     template_name = 'adminpage/model_type_create_view.html'
@@ -66,7 +66,7 @@ class ModelTypeCreateView(LoginRequiredMixin, CreateView):
         context['form'] = ModelTypeUpdateForm()
         return context
 
-class ModelTypeDeleteView(LoginRequiredMixin, DeleteView):
+class ModelTypeDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='model'
     model = ModelType

@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import SafetyDevice
 from item_log.form_lake.safety_device_form import SafetyDeviceUpdateForm
-
-class SafetyDeviceIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class SafetyDeviceIndexView(LoginRequiredMixin,  AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/safety_device_index.html'
     model = SafetyDevice
     paginate_by = 20
@@ -21,7 +21,7 @@ class SafetyDeviceIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class SafetyDeviceDetailView(LoginRequiredMixin, generic.DetailView):
+class SafetyDeviceDetailView(LoginRequiredMixin,  AuthorityTestMixin,  generic.DetailView):
     pk_url_kwarg='safety_device_id'
     model = SafetyDevice
     template_name = 'adminpage/safety_device_detail_view.html'
@@ -32,7 +32,7 @@ class SafetyDeviceDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class SafetyDeviceUpdateFormView(LoginRequiredMixin, UpdateView):
+class SafetyDeviceUpdateFormView(LoginRequiredMixin, AuthorityTestMixin,  UpdateView):
     template_name = 'adminpage/safety_device_detail_view.html'
     form_class = SafetyDeviceUpdateForm
     model = SafetyDevice
@@ -56,7 +56,7 @@ class SafetyDeviceView(View):
         view = SafetyDeviceUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class SafetyDeviceCreateView(LoginRequiredMixin, CreateView):
+class SafetyDeviceCreateView(LoginRequiredMixin, AuthorityTestMixin,  CreateView):
     model = SafetyDevice
     fields = '__all__'
     template_name = 'adminpage/safety_device_create_view.html'
@@ -66,7 +66,7 @@ class SafetyDeviceCreateView(LoginRequiredMixin, CreateView):
         context['form'] = SafetyDeviceUpdateForm()
         return context
 
-class SafetyDeviceDeleteView(LoginRequiredMixin, DeleteView):
+class SafetyDeviceDeleteView(LoginRequiredMixin,  AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
     pk_url_kwarg='safety_device_id'
     model = SafetyDevice

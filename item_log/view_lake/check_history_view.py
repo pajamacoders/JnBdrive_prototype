@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import CheckHistory
 from item_log.form_lake.check_history_form import CheckHistoryUpdateForm
-
-class CheckHistoryIndexView(LoginRequiredMixin, generic.ListView):
+from item_log.view_lake.authority_test  import AuthorityTestMixin
+class CheckHistoryIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/check_history_index.html'
     model = CheckHistory
     paginate_by = 20
@@ -21,7 +21,7 @@ class CheckHistoryIndexView(LoginRequiredMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class CheckHistoryDetailView(LoginRequiredMixin, generic.DetailView):
+class CheckHistoryDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
     pk_url_kwarg='id'
     model = CheckHistory
     template_name = 'adminpage/check_history_detail_view.html'
@@ -32,7 +32,7 @@ class CheckHistoryDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class CheckHistoryUpdateFormView(LoginRequiredMixin, UpdateView):
+class CheckHistoryUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     template_name = 'adminpage/check_history_detail_view.html'
     form_class = CheckHistoryUpdateForm
     model = CheckHistory
@@ -56,7 +56,7 @@ class CheckHistoryView(View):
         view = CheckHistoryUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class CheckHistoryCreateView(LoginRequiredMixin, CreateView):
+class CheckHistoryCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = CheckHistory
     fields = '__all__'
     template_name = 'adminpage/check_history_create_view.html'
@@ -68,7 +68,7 @@ class CheckHistoryCreateView(LoginRequiredMixin, CreateView):
 
 
 
-class CheckHistoryDeleteView(LoginRequiredMixin, DeleteView):
+class CheckHistoryDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     pk_url_kwarg='id'
     model = CheckHistory
     success_url = reverse_lazy('item_log:check_history_list')

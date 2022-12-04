@@ -10,10 +10,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from config import settings
 from .models import Parts, Motor, Break, Reducer, SafetyDevice
+from item_log.view_lake.authority_test  import AuthorityTestMixin
 # from .models import Item, Buyer, SalesHistory, InspectionLog
 
 
-class AdminPageView(LoginRequiredMixin, TemplateView):
+class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
     login_url = settings.LOGIN_URL
     template_name = 'adminpage/test.html'#'adminpage/layout-static.html'
 
@@ -55,14 +56,6 @@ class ProductSearchView(LoginRequiredMixin,TemplateView):
     redirect_field_name = 'next'
     template_name = 'item_log/searchview_v2.html'
 
-
-class IndexView(generic.ListView):
-    template_name = 'item_log/index.html'
-    context_object_name = 'logs'
-
-    def get_queryset(self):
-        pass
-
 class ProductInfo(View):
     initial = {'key': 'value'}
     template_name = 'ProductInfoView.html'
@@ -73,12 +66,3 @@ class ProductInfo(View):
     def post(self, request, *args, **kwargs):
         pass
 
-
-def brief_inspection_history(request, item_id):
-    pass
-
-def detailed_inspection_history(request, item_id, inspection_date):
-    pass
-
-def saleshistory(request, item_id):
-    pass
