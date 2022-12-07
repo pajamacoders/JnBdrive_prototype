@@ -129,15 +129,19 @@ class ProductionCompany(models.Model):
 class Product(models.Model):
     serial=models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='리프트 번호')
     model=models.ForeignKey(ModelType, null=True, blank=True, on_delete=models.CASCADE, db_column="model_type", verbose_name='모델명')
-    safety_device=models.ForeignKey(SafetyDevice, null=True, blank=True, on_delete=models.SET_NULL, db_column='safety_device', verbose_name='가바나')
-    reducer=models.ForeignKey(Reducer, null=True, blank=True, on_delete=models.SET_NULL, db_column='reducer', verbose_name='감속기')
-    motor=models.ForeignKey(Motor, null=True, blank=True, on_delete=models.SET_NULL, db_column='motor', verbose_name='모터')
-    brake=models.ForeignKey(Break, null=True, blank=True, on_delete=models.SET_NULL, db_column='brake', verbose_name='브레이크')
+    safety_device=models.OneToOneField(SafetyDevice, null=True, blank=True, on_delete=models.SET_NULL, db_column='safety_device', verbose_name='가바나')
+    reducer=models.OneToOneField(Reducer, null=True, blank=True, on_delete=models.SET_NULL, db_column='reducer', verbose_name='감속기')
+    motor=models.OneToOneField(Motor, null=True, blank=True, on_delete=models.SET_NULL, db_column='motor', verbose_name='모터')
+    brake=models.OneToOneField(Break, null=True, blank=True, on_delete=models.SET_NULL, db_column='brake', verbose_name='브레이크')
     production_company=models.ForeignKey(ProductionCompany, null=True, blank=True, on_delete=models.SET_NULL, db_column="production_company_id", verbose_name='제조업체')
     production_date=models.DateField('제조일', null=True, blank=True, editable=True)
     discard_date=models.DateField('폐기일', null=True, blank=True, editable=True)
+
     def __str__(self):
         return f'{self.serial}'
+    
+    def get_absolute_url(self):
+        return reverse('item_log:product_list')
     class Meta:
         db_table = 'products'
 
@@ -209,17 +213,17 @@ class CheckHistory(models.Model):
     class Meta:
         db_table='check_history'
         ordering=['date','product', 'part']
-        # constraints = [
-        #     models.CheckConstraint(
-        #         name="%(app_label)s_%(class)s_part_or_product",
-        #         check=(
-        #             models.Q(part__isnull=True,product__isnull=False)|
-        #             models.Q(part__isnull=False,product__isnull=True)
+        constraints = [
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_part_or_product",
+                check=(
+                    models.Q(part__isnull=True,product__isnull=False)|
+                    models.Q(part__isnull=False,product__isnull=True)
 
-        #         ),
-        #         violation_error_message="부품이나 제품 중 하나만 선택가능합니다."
-        #     )
-        # ]
+                ),
+                violation_error_message="부품이나 제품 중 하나만 선택가능합니다."
+            )
+        ]
 
 
 

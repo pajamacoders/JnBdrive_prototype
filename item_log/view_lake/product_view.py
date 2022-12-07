@@ -25,7 +25,7 @@ class ProductDetailView(LoginRequiredMixin,  AuthorityTestMixin, generic.DetailV
     pk_url_kwarg='serial'
     model = Product
     template_name = 'adminpage/product_detail_view.html'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = ProductUpdateForm(instance=self.model.objects.get(pk=self.kwargs['serial']))
@@ -36,7 +36,7 @@ class ProductUpdateFormView(LoginRequiredMixin,  AuthorityTestMixin, UpdateView)
     template_name = 'adminpage/product_detail_view.html'
     form_class = ProductUpdateForm
     model = Product
-    pk_url_kwarg='model'
+    pk_url_kwarg='serial'
     def post(self, request, *args, **kwargs):
       
         if not request.user.is_authenticated:
@@ -58,13 +58,13 @@ class ProductView(View):
 
 class ProductCreateView(LoginRequiredMixin,  AuthorityTestMixin,  CreateView):
     model = Product
-    fields = '__all__'
+    # fields = '__all__'
     template_name = 'adminpage/product_create_view.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ProductUpdateForm()
-        return context
+    form_class = ProductUpdateForm
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = ProductUpdateForm()
+    #     return context
 
 class ProductDeleteView(LoginRequiredMixin,  AuthorityTestMixin,  DeleteView):
     # template_name="adminpage/motor_delete_view.html"
