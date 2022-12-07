@@ -12,5 +12,5 @@ class FaultHistoryUpdateForm(forms.ModelForm):
             'date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date', 'class': 'form-control'}),
             'cause': forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'repair_company': forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
-            'parts': forms.Select(attrs={'class':'form-control form-select form-select-md mb-3', 'id':'part_list'}),
+            'parts': forms.Select(attrs={'class':'form-select', 'id':'select2_1st'}),#, 'id':'part_list'form-select-md mb-3
         }

@@ -58,13 +58,13 @@ class CheckHistoryView(View):
 
 class CheckHistoryCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = CheckHistory
-    fields = '__all__'
+    # fields = '__all__'
     template_name = 'adminpage/check_history_create_view.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = CheckHistoryUpdateForm()
-        return context
+    form_class = CheckHistoryUpdateForm
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = CheckHistoryUpdateForm()
+    #     return context
 
 
 
