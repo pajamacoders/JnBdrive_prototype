@@ -18,12 +18,8 @@
             <th>정밀 안전검사 예정일</th>
             <th>철거예정일</th>
             <th>안전관리자</th>
-            <th>안전관리자 연락처</th>
-            <th>안전교육 이수일</th>
             <th>유지관리업체</th>
-            <th>유지관리업체 연락처</th>
             <th>하도급/공동수급업체</th>
-            <th>하도급/공동수급업체 연락처</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
@@ -39,12 +35,8 @@
             <th>정밀 안전검사 예정일</th>
             <th>철거예정일</th>
             <th>안전관리자</th>
-            <th>안전관리자 연락처</th>
-            <th>안전교육 이수일</th>
             <th>유지관리업체</th>
-            <th>유지관리업체 연락처</th>
             <th>하도급/공동수급업체</th>
-            <th>하도급/공동수급업체 연락처</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
@@ -61,12 +53,8 @@
             <td>{{ contract.next_check_date|date:'Y-m-d' }}</td>
             <td>{{ contract.withdrawal_date|date:'Y-m-d' }}</td>
             <td>{{ contract.safety_checker }}</td>
-            <td>{{ contract.safety_checker_phone }}</td>
-            <td>{{ contract.safety_edu_comp_date|date:'Y-m-d' }}</td>
             <td>{{ contract.management_company }}</td>
-            <td>{{ contract.management_comp_phone }}</td>
             <td>{{ contract.subcontract_company }}</td>
-            <td>{{ contract.subcontract_comp_phone }}</td>
             <td> 
                 <a href="{% url 'item_log:contract_detail_view' contract.id %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
             </td>

@@ -58,13 +58,9 @@ class ReducerView(View):
 
 class ReducerCreateView(LoginRequiredMixin,  AuthorityTestMixin,  CreateView):
     model = Reducer
-    fields = '__all__'
+    form_class = ReducerUpdateForm
     template_name = 'adminpage/reducer_create_view.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ReducerUpdateForm()
-        return context
 
 class ReducerDeleteView(LoginRequiredMixin,  AuthorityTestMixin,  DeleteView):
     # template_name="adminpage/motor_delete_view.html"

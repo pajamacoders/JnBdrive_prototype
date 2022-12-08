@@ -6,7 +6,7 @@ from item_log.models import ProductionCompany
 class ProductionCompanyUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'instance' in kwargs.keys():
+        if 'instance' in kwargs.keys() and kwargs['instance'] is not None:
             self.fields['business_number'].disabled = True
     class Meta:
         model = ProductionCompany
@@ -22,3 +22,13 @@ class ProductionCompanyUpdateForm(forms.ModelForm):
             'start_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date', 'class': 'form-control'}),
             'end_date': forms.DateInput(format='%Y-%m-%d', attrs={'type':'date', 'class': 'form-control'}),
         }
+    def _post_clean(self):
+        super()._post_clean()
+        if self._errors:
+            for key in self._errors.keys():
+                if 'already exists.' in self._errors[key][0]:
+                    self._errors[key][0]=f'동일 사업자 번호를 가진 업체가 존재합니다.'
+        
+        if self.cleaned_data['start_date'] and self.cleaned_data['end_date']:
+            if self.cleaned_data['start_date']> self.cleaned_data['end_date']:
+                self.add_error('end_date', '보험 만기일은 시작일 보다 빠를 수 없습니다.')

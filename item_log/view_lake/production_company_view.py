@@ -58,13 +58,10 @@ class ProductionCompanyView(View):
 
 class ProductionCompanyCreateView(LoginRequiredMixin,  AuthorityTestMixin, CreateView):
     model = ProductionCompany
-    fields = '__all__'
+    form_class = ProductionCompanyUpdateForm
     template_name = 'adminpage/production_company_create_view.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ProductionCompanyUpdateForm()
-        return context
+
 
 class ProductionCompanyDeleteView(LoginRequiredMixin, AuthorityTestMixin,  DeleteView):
     # template_name="adminpage/motor_delete_view.html"

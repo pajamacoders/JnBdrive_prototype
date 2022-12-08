@@ -33,7 +33,7 @@
             <td>{{ safety_device.serial }}</td>
             <td>{{ safety_device.production_date|date:'Y-m-d' }}</td>
             <td>{{ safety_device.discard_date|date:'Y-m-d' }}</td>
-            <td>{{ safety_device.model_serial }}</td>
+            <td>{{ safety_device.safetydevice.product.serial }}</td>
             <td class="field-__str__"> 
                 <a href="{% url 'item_log:safety_device_detail_view' safety_device.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
             </td>

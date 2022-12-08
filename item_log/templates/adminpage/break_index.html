@@ -33,7 +33,7 @@
             <td>{{ break.serial }}</td>
             <td>{{ break.production_date|date:'Y-m-d' }}</td>
             <td>{{ break.discard_date|date:'Y-m-d' }}</td>
-            <td>{{ break.model_serial }}</td>
+            <td>{{ break.break.product.serial  }}</td>
             <td class="field-__str__"> 
                 <a href="{% url 'item_log:break_detail_view' break.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
             </td>

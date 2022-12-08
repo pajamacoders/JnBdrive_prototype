@@ -16,7 +16,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 
 class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
     login_url = settings.LOGIN_URL
-    template_name = 'adminpage/test.html'#'adminpage/layout-static.html'
+    template_name = 'adminpage/layout-static.html'
 
 # class AdminPageLoginView(LoginView):
 #     next_page = '/admin/'

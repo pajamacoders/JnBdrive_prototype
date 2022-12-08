@@ -59,13 +59,8 @@ class BreakView(View):
 
 class BreakCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = Break
-    fields = '__all__'
+    form_class = BreakUpdateForm
     template_name = 'adminpage/break_create_view.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = BreakUpdateForm()
-        return context
 
 class BreakDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"

@@ -8,7 +8,6 @@
 {% block table_contents %}
     <thead>
         <tr>
-            <th>감속기 제품명</th>
             <th>감속기 시리얼</th>
             <th>생산일</th>
             <th>폐기일</th>
@@ -19,7 +18,6 @@
     </thead>
     <tfoot>
         <tr>
-            <th>감속기 제품명</th>
             <th>감속기 시리얼</th>
             <th>생산일</th>
             <th>폐기일</th>
@@ -31,11 +29,10 @@
     <tbody>
     {% for reducer in reducers %}
         <tr>
-            <td>이름</td>
             <td>{{ reducer.serial }}</td>
             <td>{{ reducer.production_date|date:'Y-m-d' }}</td>
             <td>{{ reducer.discard_date|date:'Y-m-d' }}</td>
-            <td>{{ reducer.model_serial }}</td>
+            <td>{{ reducer.reducer.product.serial }}</td>
             <td class="field-__str__"> 
                 <a href="{% url 'item_log:reducer_detail_view' reducer.serial %}"><i class="fa-sharp fa-solid fa-pen-nib"></i></a>
             </td>

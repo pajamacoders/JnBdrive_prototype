@@ -58,13 +58,10 @@ class MotorView(View):
 
 class MotorCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = Motor
-    fields = '__all__'
     template_name = 'adminpage/motor_create_view.html'
+    form_class = MotorUpdateForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = MotorUpdateForm()
-        return context
+
 class MotorDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     pk_url_kwarg='motor_id'
     model = Motor
