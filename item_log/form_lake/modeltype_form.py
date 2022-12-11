@@ -6,7 +6,7 @@ from item_log.models import ModelType
 class ModelTypeUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'instance' in kwargs.keys():
+        if 'instance' in kwargs.keys() and kwargs['instance'] is not None:
             self.fields['model'].disabled = True
     class Meta:
         model = ModelType

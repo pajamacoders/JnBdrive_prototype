@@ -73,9 +73,10 @@
                                     <a class="nav-link" href="{% url 'item_log:production_company_list' %}">제조업체</a>
                                     <a class="nav-link" href="{% url 'item_log:check_history_list' %}">검사이력</a>
                                     <a class="nav-link" href="{% url 'item_log:fault_history_list' %}">고장이력</a>
-                                    <a class="nav-link" href="layout-static.html">자체점검 이력</a>
+                                    {% comment %} <a class="nav-link" href="layout-static.html">자체점검 이력</a> {% endcomment %}
                                 </nav>
                             </div>
+                            {% if user.is_superuser %}
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 회원 관리
@@ -86,6 +87,7 @@
                                     <a class="nav-link" href="{% url 'item_log:user_list' %}">직원 추가</a>
                                 </nav>
                             </div>
+                            {% endif %}
                             <div class="sb-sidenav-menu-heading">Addons</div>
                             <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

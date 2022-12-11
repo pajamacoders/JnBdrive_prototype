@@ -85,8 +85,8 @@ class SafetyDevice(Parts):
         ordering=['safety_device_id']
 class ModelType(models.Model):
     types = [
-        ('S', 'Single'),
-        ('T', 'Twin')
+        ('Single', 'Single'),
+        ('Twin', 'Twin')
     ]
     model=models.CharField(max_length=200, primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='모델명')
     type=models.CharField(max_length=200, null=False, blank=False, editable=True, verbose_name='제품 타입', choices=types)

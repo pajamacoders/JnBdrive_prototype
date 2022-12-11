@@ -58,13 +58,13 @@ class ModelTypeView(View):
 
 class ModelTypeCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
     model = ModelType
-    fields = '__all__'
+    form_class = ModelTypeUpdateForm
     template_name = 'adminpage/model_type_create_view.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ModelTypeUpdateForm()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = ModelTypeUpdateForm()
+    #     return context
 
 class ModelTypeDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
