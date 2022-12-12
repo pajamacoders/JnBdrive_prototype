@@ -201,7 +201,7 @@ class CheckHistory(models.Model):
     result_types=[('합', '적합'), ('부', ('부적합'))]
     check_type=models.CharField(max_length=200, verbose_name='검사종류')
     date=models.DateField(verbose_name='검사일', null=True, blank=True, editable=True)
-    effective_duration=models.CharField(max_length=100, verbose_name='운행유효기간(개월)', null=True, blank=True, editable=True)
+    effective_duration=models.IntegerField(default=6, verbose_name='운행유효기간(개월)', null=True, blank=True, editable=True)
     inspection_agency=models.ForeignKey(CheckCompany, verbose_name='검사기관',  null=False, blank=False, editable=True, on_delete=models.DO_NOTHING)
     inspector=models.CharField(max_length=100, null=True, blank=True, editable=True, verbose_name='검사원')
     result=models.CharField(max_length=100, null=False, blank=False, editable=True, verbose_name='합격유무', choices=result_types)

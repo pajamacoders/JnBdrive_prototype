@@ -37,7 +37,7 @@ class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
         data=[]
         for i in range(model_type.count()):
             tmp={'type':model_type[i].model}
-            tmp.update(model_type[1].product_set.aggregate(count=Count('*')))
+            tmp.update(model_type[i].product_set.aggregate(count=Count('*')))
             data.append(tmp)
         return data
     
@@ -46,7 +46,7 @@ class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
         the input month range from -12 ~ 12
         """
         delta = today.month +month
-        today.replace(month=12+delta).replace(year=today.year-1)
+
         if delta<1:
             today = today.replace(month=12+delta).replace(year=today.year-1)
         elif delta>12:
@@ -59,17 +59,20 @@ class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
         today = date.today()
         start_month = self.update_date(today, -3).replace(day=1)
         last_month = self.update_date(today, 10).replace(day=1)-timedelta(days=1)
-        check_events = CheckHistory.objects.filter(date__gte=start_month, date__lte=last_month)
-        ev_per_month  = check_events.annotate(month=TruncMonth('date')).values('month').annotate(count=Count('*')).values('month', 'count')
-        pass
+        check_events = CheckHistory.objects.exclude(date__isnull=True)
+        [obj.__setattr__('end_date',self.update_date(obj.date, obj.effective_duration)) for obj in check_events]
+        interest_events = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month]
+        [obj.__setattr__('site_name', obj.product.contract_set.all()[0].site_name) for obj in interest_events]
+        # check_events[0].product.contract_set.all()[0].site_name
+        return interest_events
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         parts_statics = self.get_parts_statics()  
         context['parts_statics'] = json.dumps(parts_statics)
         model_statics = self.get_model_statics()
         context['model_statics'] = json.dumps(model_statics)
-        self.get_upcoming_check_event()
-        # context['part_inventories']=
+        context['upcoming_check']=self.get_upcoming_check_event()
         return context
 
 # class AdminPageLoginView(LoginView):
