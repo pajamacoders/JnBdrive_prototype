@@ -19,6 +19,7 @@ urlpatterns=[
     path('login/', views.SearchSystemLoginView.as_view(template_name='item_log/login.html'), name='user_login'),
     path('logout/', views.SearchSystemLogoutView.as_view(template_name='item_log/login.html'), name='user_logout'),
     path('search/', views.ProductSearchView.as_view(),name='product_search'),
+    path('info/', views.ProductInfo.as_view(),name='product_info'),
     path('admin/', views.AdminPageView.as_view(), name='dashboard'),
     #motor
     path('admin/parts/motors/lists', MotorIndexView.as_view(), name='motor_list'),

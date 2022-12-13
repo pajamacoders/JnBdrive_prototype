@@ -113,13 +113,15 @@ class ProductSearchView(LoginRequiredMixin,TemplateView):
     redirect_field_name = 'next'
     template_name = 'item_log/searchview_v2.html'
 
-class ProductInfo(View):
-    initial = {'key': 'value'}
-    template_name = 'ProductInfoView.html'
+class ProductInfo(LoginRequiredMixin, TemplateView):
+    login_url = settings.LOGIN_URL
+    # initial = {'key': 'value'}
+    redirect_field_name = 'next'
+    template_name = 'item_log/ProductInfoView.html'
 
-    def get(self, request, *args, **kwargs):
-        pass
+    # def get(self, request, *args, **kwargs):
+    #     pass
 
-    def post(self, request, *args, **kwargs):
-        pass
+    # def post(self, request, *args, **kwargs):
+    #     pass
 
