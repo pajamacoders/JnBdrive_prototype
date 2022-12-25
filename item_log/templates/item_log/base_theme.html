@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Landing Page - Start Bootstrap Theme</title>
+        <title>제이앤비드라이브 제품 정보시스템</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'item_log/theme/assets/favicon.ico' %}" />
         <!-- Bootstrap icons-->
@@ -53,6 +53,10 @@
                 </div>
             </div>
         </header>
+        <div class="container">
+            {% block search_result %}
+            {% endblock %}
+        </div>
         <!-- Footer-->
         <footer class="footer bg-light">
             <div class="container">

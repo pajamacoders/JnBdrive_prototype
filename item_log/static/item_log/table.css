@@ -19,7 +19,7 @@ body {
 }
 
 .main {
-    width: 1500px;
+    width: 100%;
     background-color: #fff;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
@@ -50,3 +50,23 @@ body {
     background-color: dodgerblue;
     color: #fff;
 }
+
+@media only screen and (max-width: 748px) {
+    .main {
+      margin: 0 -10px;
+    }
+    .main tr {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .main th {
+      display: block;
+      width: 100%;
+    }
+    .main td {
+      display: list-item;
+      width: 90%;
+      margin-left: 10%;
+      border: none;
+    }
+    }

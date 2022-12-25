@@ -3,15 +3,14 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from item_log.models import Break
-from item_log.form_lake.break_form import BreakUpdateForm
+from item_log.models import Brake
+from item_log.form_lake.break_form import BrakeUpdateForm
 from item_log.view_lake.authority_test  import AuthorityTestMixin
 
-class BreakIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
-    template_name = 'adminpage/break_index.html'
-    model = Break
-    paginate_by = 20
-    context_object_name = 'breaks'
+class BrakeIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
+    template_name = 'adminpage/brake_index.html'
+    model = Brake
+    context_object_name = 'brakes'
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -22,22 +21,22 @@ class BreakIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
         query_set = super().get_queryset()
         return query_set
 
-class BreakDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
-    pk_url_kwarg='break_id'
-    model = Break
-    template_name = 'adminpage/break_detail_view.html'
+class BrakeDetailView(LoginRequiredMixin, AuthorityTestMixin, generic.DetailView):
+    pk_url_kwarg='brake_id'
+    model = Brake
+    template_name = 'adminpage/brake_detail_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = BreakUpdateForm(instance=self.model.objects.get(pk=self.kwargs['break_id']))
+        context['form'] = BrakeUpdateForm(instance=self.model.objects.get(pk=self.kwargs['brake_id']))
         return context
 
 
-class BreakUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
-    template_name = 'adminpage/break_detail_view.html'
-    form_class = BreakUpdateForm
-    model = Break
-    pk_url_kwarg='break_id'
+class BrakeUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
+    template_name = 'adminpage/brake_detail_view.html'
+    form_class = BrakeUpdateForm
+    model = Brake
+    pk_url_kwarg='brake_id'
     def post(self, request, *args, **kwargs):
       
         if not request.user.is_authenticated:
@@ -47,26 +46,26 @@ class BreakUpdateFormView(LoginRequiredMixin, AuthorityTestMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-class BreakView(View):
+class BrakeView(View):
 
     def get(self, request, *args, **kwargs):
-        view = BreakDetailView.as_view()
+        view = BrakeDetailView.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        view = BreakUpdateFormView.as_view()
+        view = BrakeUpdateFormView.as_view()
         return view(request, *args, **kwargs)
 
-class BreakCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
-    model = Break
-    form_class = BreakUpdateForm
-    template_name = 'adminpage/break_create_view.html'
+class BrakeCreateView(LoginRequiredMixin, AuthorityTestMixin, CreateView):
+    model = Brake
+    form_class = BrakeUpdateForm
+    template_name = 'adminpage/brake_create_view.html'
 
 class BreakDeleteView(LoginRequiredMixin, AuthorityTestMixin, DeleteView):
     # template_name="adminpage/motor_delete_view.html"
-    pk_url_kwarg='break_id'
-    model = Break
-    success_url = reverse_lazy('item_log:break_list')
+    pk_url_kwarg='brake_id'
+    model = Brake
+    success_url = reverse_lazy('item_log:brake_list')
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()

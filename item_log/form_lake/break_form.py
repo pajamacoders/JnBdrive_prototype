@@ -1,16 +1,16 @@
 
 
 from django import forms
-from item_log.models import Break
+from item_log.models import Brake
 
-class BreakUpdateForm(forms.ModelForm):
+class BrakeUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'instance' in kwargs.keys() and kwargs['instance'] is not None:
             self.fields['serial'].disabled = True
         self.fields['category'].initial='브레이크'
     class Meta:
-        model = Break
+        model = Brake
         fields = ['serial', 'category', 'production_date', 'discard_date',  'torque']
         widgets = {
             'serial':forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),

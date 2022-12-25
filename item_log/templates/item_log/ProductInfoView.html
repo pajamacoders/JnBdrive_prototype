@@ -1,201 +1,212 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'item_log/table.css' %}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>제이앤비드라이브 제품 정보시스템</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'item_log/theme/assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'item_log/theme/css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'item_log/table.css' %}">
+</head>
+
 <body>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "4">건설용 리프트 정보 입력</th></p>
-            </tr>
-            <tr>
-                <td>건설용 리프트 모델명</td>
-                <td> 모델명 </td>
-                {% comment %} <td><input type="text" placeholder="시리얼을 입력하시오" size="20" style="width:100%; height:100%; border: 0;"></td> {% endcomment %}
-                <td>제작일</td>
-                <td><input type="text" placeholder="입력하시오" size="20" style="width:100%; height:100%; border: 0;"></td>
-            </tr>
-            <tr>
-                <td colspan ="4" height="30"></td>
-            </tr>
-            <tr>
-                <td>현장명</td>
-                <td><input type="text" placeholder="현장명" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>소재지</td>
-                <td><input type="text" placeholder="소재지" size="20" style="width:100%; height:100%; border: 0;"></td>
-            </tr>
-            <tr>
-                <td>제조업체</td>
-                <td>(주)제이앤비드라이브</td>
-                <td>리프트 번호</td>
-                <td>
-                    <select width="250px">
-                        {% if parts %}
-                            <ul>
-                            {% for part in parts %}
-                                <!-- <li><a href="/item_log/{{ log.item_id.item_id }}/{{ log.inspection_date|date:'Y-m-d' }}/detailed_inspection_history/">{{ log.item_id.item_id }} {{ log.inspection_date }}</a></li> -->
-                                <option value="{{ part.item_id }}"> {{ part.item_id }}</option>
-                            {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p> 해당 부품에 대한 검사 이력이 없습니다.</p>
-                        {% endif %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>적재하중</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>최대정원</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-            </tr>
-            <tr>
-                <td>운행구간</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>운행층수</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-            </tr>
-            <tr>
-                <td>지상층수</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>지하층수</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>		
-            </tr>
-            <tr>
-                <td>정격속도</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>최종검사일</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>		
-            </tr>
-            <tr>
-                <td>검사유효기간(보완기간)</td>
-                <td></td>
-                <td>설치일/최초설치일</td>
-                <td><input type="date"></td>		
-            </tr>
-            <tr>
-                <td>다음 정기검사주기</td>
-                <td></td>
-                <td>정밀안전검사예정일</td>
-                <td></td>		
-            </tr>
-        </table>
-    </div>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "4">관리 업체 정보</th></p>
-            </tr>
-            <tr>
-                <td>유지관리업체명</td>
-                {% comment %} <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td> {% endcomment %}
-                <td>
-                    <select name="업체명" style="width:250px">
-                        <option value="(주)동일"> (주)동일 </option>
-                        <option value="(주)동일"> (주)모비스 </option>
-                        <option value="(주)동일"> (주)삼성 </option>
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+                <div class="text-center text-white">
+                    <!-- Page heading-->
+                    <div class="table-outer"> 
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "4">건설용 리프트 정보 입력</th></p>
+                            </tr>
+                            <tr>
+                                <td>건설용 리프트 안전인증번호</td>
+                                <td> {{ product.serial }} </td>
+                                {% comment %} <td><input type="text" placeholder="시리얼을 입력하시오" size="20" style="width:100%; height:100%; border: 0;"></td> {% endcomment %}
+                                <td>제작일</td>
+                                <td> {{ product.production_date }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan ="4" height="30"></td>
+                            </tr>
+                            <tr>
+                                <td>현장명</td>
+                                <td>{{ contract.site_name }}</td>
+                                <td>소재지</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>제조업체</td>
+                                <td> {{ product.production_company }}</td>
+                                <td>리프트 모델명</td>
+                                <td> {{ product.model_id }} </td>
+                            </tr>
+                            <tr>
+                                <td>적재하중</td>
+                                <td>{{ model.load_weight }}</td>
+                                <td>최대정원</td>
+                                <td>{{ model.capacity }}</td>
+                            </tr>
+                            <tr>
+                                <td>운행구간</td>
+                                <td>{{ model.operation_section }}</td>
+                                <td>운행층수</td>
+                                <td>{{ model.}}</td>
+                            </tr>
+                            <tr>
+                                <td>지상층수</td>
+                                <td>{{ contract.num_floors }}</td>
+                                <td>지하층수</td>
+                                <td>{{ contract.num_basements }}</td>		
+                            </tr>
+                            <tr>
+                                <td>정격속도</td>
+                                <td>{{ model.rated_speed }}</td>
+                                <td></td>
+                                <td></td>	
+                            </tr>
+                            <tr>
+                                <td>설치일/최초설치일</td>
+                                <td>{{ contract.instalation_date }}</td>
+                                <td>철거예정일</td>
+                                <td>{{ contract.withdrawal_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>검사유효기간(보완기간)</td>
+                                <td>{{ check_histories.effective_duration }} </td>
+                                <td>최종검사일</td>
+                                <td>{{ check_histories.date }}</td>			
+                            </tr>
+                            <tr>
+                                <td>다음 정기검사주기</td>
+                                <td>{{ check_histories.date }}</td>
+                                <td>정밀안전검사예정일</td>
+                                <td>{{ contract.next_check_date }}</td>		
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-outer"> 
+                        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "4">관리 업체 정보</th></p>
+                            </tr>
+                            <tr>
+                                <td>유지관리업체명</td>
+                                <td>{{ contract.management_company }}</td>
+                                <td>유지관리업체 연락처</td>
+                                <td>{{ contract.management_comp_phone }}</td>		
+                            </tr>
+                            <tr>
+                                <td>하도급/공동수급 업체명</td>
+                                <td>{{ contract.subcontract_company }}</td>
+                                <td>하도급/공동수급 연락처</td>
+                                <td>{{ contract.subcontract_comp_phone }}</td>		
+                            </tr>
+                            <tr>
+                                <td>최종검사기관</td>
+                                <td colspan = "3"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-outer"> 
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "8">보험 업체 정보</th></p>
+                            </tr>
+                            <tr>
+                                <td>보험사명</td>
+                                <td>{{ production_company.insureance_company }}</td>
+                                <td>보험상품명</td>
+                                <td>{{ production_company.insureance }}</td>		
+                                <td>보험기간 시작일</td>
+                                <td>{{ production_company.start_date|date:'Y-m-d' }}</td>
+                                <td>보장기간 종료시점</td>
+                                <td>{{ production_company.end_date|date:'Y-m-d' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-outer"> 
                         
-                    </select>
-                </td>
-                <td>유지관리업체 연락처</td>
-                <td></td>		
-            </tr>
-            <tr>
-                <td>하도급/공동수급 업체명</td>
-                <td></td>
-                <td>하도급/공동수급 연락처</td>
-                <td></td>		
-            </tr>
-            <tr>
-                <td>최종검사기관</td>
-                <td colspan = "3">
-                    <select name="검사기관" style="width:250px">
-                        <option value="(주)동일"> 대한산업안전협회 </option>
-                        <option value="(주)동일"> 국토부 </option>
-                        <option value="(주)동일"> 산자부 </option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "6">보험 업체 정보</th></p>
-            </tr>
-            <tr>
-                <td>보험사명</td>
-                <td></td>
-                <td>보험상품명</td>
-                <td></td>		
-                <td>보험상품명</td>
-                <td></td>
-            </tr>
-        </table>
-    </div>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "8">안전 관리자 정보</th></p>
-            </tr>
-            <tr>
-                <td>안전과리자명</td>
-                <td></td>
-                <td>안전관리자 연락처</td>
-                <td></td>		
-                <td>안전관리자 선임일</td>
-                <td></td>
-                <td>교육 이수일</td>
-                <td></td>
-            </tr>
-        </table>
-    </div>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "12">검사이력</th></p>
-            </tr>
-            <tr>
-                <td>검사종류</td>
-                <td></td>
-                <td>검사일자</td>
-                <td></td>		
-                <td>운행유효기간</td>
-                <td></td>
-                <td>검사기관</td>
-                <td></td>
-                <td>검사원</td>
-                <td></td>
-                <td>합격유무</td>
-                <td>
-                    <select name="검사기관" style="width:100px">
-                        <option value="(주)동일"> 적합 </option>
-                        <option value="(주)동일"> 부적합 </option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="table-outer"> 
-        {% comment %} bordercolor="blue" width ="1000" height="300" {% endcomment %}
-        <table class="main">
-            <tr>
-                <p><th colspan = "12">고장이력</th></p>
-            </tr>
-            <tr>
-                <td>고장일시</td>
-                <td><input type="text" placeholder="고장일시" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>고장유형</td>
-                <td><input type="text" placeholder="고장유형" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>고장원인</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-                <td>구출기관</td>
-                <td><input type="text" placeholder="입력" size="20" style="width:100%; height:100%; border: 0;"></td>
-            </tr>
-        </table>
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "8">안전 관리자 정보</th></p>
+                            </tr>
+                            <tr>
+                                <td>안전과리자명</td>
+                                <td>{{ contract.safety_checker }}</td>
+                                <td>안전관리자 연락처</td>
+                                <td>{{ contract.safety_checker_phone }}</td>		
+                                <td>안전관리자 선임일</td>
+                                <td>{{ contract.safety_checker }}</td>
+                                <td>교육 이수일</td>
+                                <td>{{ contract.safety_edu_comp_date }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-outer"> 
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "7">검사이력</th></p>
+                            </tr>
+                            <tr>
+                                <td>검사종류</td>
+                                <td>검사일</td>
+                                <td>운행유효기간</td>
+                                <td>검사기관</td>
+                                <td>검사원</td>
+                                <td>합격유무</td> 
+                            </tr>
+                            <tr>
+                                {% for chk in checkhistories%}
+                                <td>{{ chk.check_type }}</td>
+                                <td>{{ chk.date }}</td>
+                                <td>{{ chk.effective_duration }}</td>
+                                <td>{{ chk.inspection_agency }}</td>
+                                <td>{{ chk.inspector }}</td>
+                                <td>{{ chk.result }}</td>
+                                {% empty %}
+                                <td colspan = "7">검사이력이 없습니다.</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-outer"> 
+                        <table class="main">
+                            <tr>
+                                <p><th colspan = "12">고장이력</th></p>
+                            </tr>
+                            <tr>
+                                <td>고장부품</td>
+                                <td>고장부품타입</td>
+                                <td>고장일시</td>
+                                <td>고장유형</td>
+                                <td>고장원인</td>
+                                <td>구출기관</td>
+                            </tr>
+                            <tr>
+                                {% for fault in fault_histories %}
+                                <td>{{ fault.serial }}</td>
+                                <td>{{ fault.category }}</td>
+                                <td>{{ fault.date }}</td>
+                                <td>{{ fault.fault_type }}</td>
+                                <td>{{ fault.cause }}</td>
+                                <td>{{ fault.repair_company }}</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        </div>
     </div>
 </body>
-<p><input stype="width=250px" type="button" value="저장"></p>

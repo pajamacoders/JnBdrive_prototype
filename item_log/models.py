@@ -6,8 +6,6 @@ from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
-
-
 class PartsType(models.Model):
     name=models.CharField(max_length=200,  primary_key=True, null=False, blank=False, unique=True, editable=True, verbose_name='부품명')
     def __str__(self):
@@ -58,18 +56,18 @@ class Motor(Parts):
         db_table = 'motor'
         ordering=['motor_id']
 
-class Break(Parts):
-    break_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='브레이크 시리얼')
+class Brake(Parts):
+    brake_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='브레이크 시리얼')
     torque = models.FloatField(verbose_name='토크') # 
     def __str__(self):
-        return f'{self.break_id}'
+        return f'{self.brake_id}'
 
     def get_absolute_url(self):
         return reverse('item_log:break_list')
 
     class Meta:
-        db_table = 'breaks'
-        ordering=['break_id']
+        db_table = 'brakes'
+        ordering=['brake_id']
 
 class SafetyDevice(Parts):
     safety_device_id =models.OneToOneField(Parts, parent_link=True, on_delete=models.CASCADE, verbose_name='가바나 시리얼')
@@ -132,7 +130,7 @@ class Product(models.Model):
     safety_device=models.OneToOneField(SafetyDevice, null=True, blank=True, on_delete=models.SET_NULL, db_column='safety_device', verbose_name='가바나')
     reducer=models.OneToOneField(Reducer, null=True, blank=True, on_delete=models.SET_NULL, db_column='reducer', verbose_name='감속기')
     motor=models.OneToOneField(Motor, null=True, blank=True, on_delete=models.SET_NULL, db_column='motor', verbose_name='모터')
-    brake=models.OneToOneField(Break, null=True, blank=True, on_delete=models.SET_NULL, db_column='brake', verbose_name='브레이크')
+    brake=models.OneToOneField(Brake, null=True, blank=True, on_delete=models.SET_NULL, db_column='brake', verbose_name='브레이크')
     production_company=models.ForeignKey(ProductionCompany, null=True, blank=True, on_delete=models.SET_NULL, db_column="production_company_id", verbose_name='제조업체')
     production_date=models.DateField('제조일', null=True, blank=True, editable=True)
     discard_date=models.DateField('폐기일', null=True, blank=True, editable=True)
@@ -198,7 +196,7 @@ class CheckCompany(models.Model):
 
 
 class CheckHistory(models.Model):
-    result_types=[('합', '적합'), ('부', ('부적합'))]
+    result_types=[('합격', '합격'), ('불합격', '불합격'), ('조건부합격', '조건부합격')]
     check_type=models.CharField(max_length=200, verbose_name='검사종류')
     date=models.DateField(verbose_name='검사일', null=True, blank=True, editable=True)
     effective_duration=models.IntegerField(default=6, verbose_name='운행유효기간(개월)', null=True, blank=True, editable=True)
@@ -231,12 +229,14 @@ class Contract(models.Model):
     part = models.ForeignKey(Parts, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='부품 시리얼')
     product= models.ForeignKey(Product, on_delete=models.CASCADE, editable=True, null=True, blank=True, verbose_name='제품 시리얼')
     site_name = models.CharField(max_length=400, null=False, blank=False, editable=True, verbose_name='현장명')
+    address = models.CharField(max_length=1000, null=True, blank=True, editable=True, verbose_name='소재지')
     num_floors = models.IntegerField(null=True, blank=True, editable=True, verbose_name='지상층')
     num_basements = models.IntegerField(null=True, blank=True, editable=True, verbose_name='지하층')
-    instalation_date=models.DateField('설치일/최초설치일',null=True, blank=True, editable=True)
+    installation_date=models.DateField('설치일/최초설치일',null=True, blank=True, editable=True)
     next_check_date=models.DateField('정밀안전검사예정일', null=True, blank=True, editable=True)
     withdrawal_date=models.DateField('철거예정일', null=True, blank=True,editable=True )
     safety_checker=models.CharField(max_length=200, verbose_name='안전관리자',null=True, blank=True,editable=True )
+    safety_checker_higher_date=models.DateField('안전관리자선임일', null=True, blank=True,editable=True )
     safety_checker_phone=models.CharField(max_length=200, verbose_name='안전관리자 연락처',null=True, blank=True,editable=True )
     safety_edu_comp_date=models.DateField('안전교육 이수일', null=True, blank=True,editable=True )
     management_company=models.CharField(max_length=200, null=True, blank=True, editable=True, verbose_name='유지관리업체')
@@ -248,7 +248,7 @@ class Contract(models.Model):
         return reverse('item_log:contract_list')
     class Meta:
         db_table='contract'
-        ordering=['instalation_date','product', 'part']
+        ordering=['installation_date','product', 'part']
         constraints = [
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_part_or_product",

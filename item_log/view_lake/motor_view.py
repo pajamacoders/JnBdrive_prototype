@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 class MotorIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/motor_index.html'
     model = Motor
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'motors'
 
     def get_context_data(self, **kwargs) -> dict:

@@ -1,42 +1,51 @@
 {% extends 'item_log/base_theme.html' %}
 
 {% block content %}
-    <!-- Page heading-->
     <h1 class="mb-5">제품 시리얼 입력</h1>
-    <!-- Signup form-->
-    <!-- * * * * * * * * * * * * * * *-->
-    <!-- * * SB Forms Contact Form * *-->
-    <!-- * * * * * * * * * * * * * * *-->
-    <!-- This form is pre-integrated with SB Forms.-->
-    <!-- To make this form functional, sign up at-->
-    <!-- https://startbootstrap.com/solution/contact-forms-->
-    <!-- to get an API token!-->
-    <form class="form-subscribe" id="searchForm">
-        <!-- product serial address input-->
+    <form action="{% url 'item_log:product_search' %}" class="form-subscribe" id="searchForm" accept-charset="utf-8">
+        {% comment %} {% csrf_token %} {% endcomment %}
         <div class="row">
             <div class="col">
-                <input class="form-control form-control-lg" id="productSerial" type="serial" placeholder="serial" />
-                {% comment %} data-sb-validations="required,email" /> {% endcomment %}
-                {% comment %} <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div> {% endcomment %}
-                {% comment %} <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div> {% endcomment %}
+                <input class="form-control form-control-lg" name="serial" type="text" placeholder="serial">
             </div>
-            <div class="col-auto"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">검색</button></div>
-        </div>
-        <!-- Submit success message-->
-        <!---->
-        <!-- This is what your users will see when the form-->
-        <!-- has successfully submitted-->
-        <div class="d-none" id="submitSuccessMessage">
-            <div class="text-center mb-3">
-                <div class="fw-bolder">Form submission successful!</div>
-                <p>To activate this form, sign up at</p>
-                <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+            <div class="col-auto">
+                <input class="btn btn-primary btn-lg" id="submitButton" type="submit" >
             </div>
         </div>
-        <!-- Submit error message-->
-        <!---->
-        <!-- This is what your users will see when there is-->
-        <!-- an error submitting the form-->
-        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
     </form>
+    
+{% endblock %}
+
+{% block search_result %}
+<div class="list-group">
+
+    <h4 class="mt-4"> 제품 검색 결과</h4>
+    {% for product in products %}
+        <a href="{% url 'item_log:product_info' product.serial %}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1"> 시리얼: {{ product.serial }}</h6>
+        </div>
+        <p>모델 타입: {{ product.model }}</p>
+        <p class="mb-1">생산일: {{ product.production_date|date:'Y-m-d' }}</p>
+        <p class="mb-1">폐기일: {{ product.discard_date|date:'Y-m-d' }}</p>
+        </a>
+    {% empty%}
+    <h5> 일치하는 모델이 없습니다. 아래 결과는 시리얼번호가 일치하는 부품리스트 입니다.</h5>
+    {% endfor %}
+    <h4 class="mt-4"> 부품 검색 결과</h4>
+    {% for part in parts %}
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+        <h6 class="mb-1"> 시리얼: {{ part.serial }}</h6>
+        <small>부품 타입: {{ part.category }}</small>
+    </div>
+    <p class="mb-1">생산일: {{ part.production_date|date:'Y-m-d' }}</p>
+    <p class="mb-1">폐기일: {{ part.discard_date|date:'Y-m-d'|default_if_none:"--" }}</p>
+    <p class="mb-1">조립된 리프트: {{ part.discard_date|date:'Y-m-d' }}</p>
+    </a>
+    {% empty%}
+    <h6>입력한 시리얼에 해당하는 부품이 없습니다. </h6>
+    {% endfor %}
+   
+</div>
 {% endblock %}
