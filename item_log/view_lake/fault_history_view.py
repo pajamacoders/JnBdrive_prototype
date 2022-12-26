@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 class FaultHistoryIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/fault_history_index.html'
     model = FaultHistory
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'fault_histories'
 
     def get_context_data(self, **kwargs) -> dict:

@@ -11,6 +11,9 @@ $(document).ready(function () {
         rowReorder: {
             selector: 'td:nth-child(2)'
         },
-        responsive: true
+        responsive: true,
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('td', nRow).css('background-color', 'White');
+    }
     });
 });

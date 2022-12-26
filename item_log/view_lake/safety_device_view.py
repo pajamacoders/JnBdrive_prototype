@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 class SafetyDeviceIndexView(LoginRequiredMixin,  AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/safety_device_index.html'
     model = SafetyDevice
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'safety_devices'
 
     def get_context_data(self, **kwargs) -> dict:

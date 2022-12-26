@@ -63,7 +63,7 @@ class Brake(Parts):
         return f'{self.brake_id}'
 
     def get_absolute_url(self):
-        return reverse('item_log:break_list')
+        return reverse('item_log:brake_list')
 
     class Meta:
         db_table = 'brakes'

@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 class ReducerIndexView(LoginRequiredMixin,  AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/reducer_index.html'
     model = Reducer
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'reducers'
 
     def get_context_data(self, **kwargs) -> dict:

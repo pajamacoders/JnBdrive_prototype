@@ -47,12 +47,16 @@
             <tbody>
                 {% for obj in upcoming_check %}
                     <tr>
+                        {% if obj.product == None %}
+                        <td>{{ obj.part.serial }}</td>
+                        {% else %}
                         <td>{{ obj.product.serial }}</td>
+                        {% endif %}
                         <td>{{ obj.end_date|date:'Y-m-d' }}</td>
                         <td>{{ obj.site_name }}</td>
                     </tr>
-                
                 {% endfor %}
+
             </tbody>   
         </table>
     </div>

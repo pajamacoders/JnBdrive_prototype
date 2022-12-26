@@ -10,6 +10,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 from django.db.models import Count
 import json
 from datetime import date, timedelta
+import calendar
 
 # from .models import Item, Buyer, SalesHistory, InspectionLog
 
@@ -41,14 +42,22 @@ class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
         the input month range from -12 ~ 12
         """
         delta = today.month +month
-
-        if delta<1:
-            today = today.replace(month=12+delta).replace(year=today.year-1)
-        elif delta>12:
-            today = today.replace(month=delta-12).replace(year=today.year+1)
+        if delta == 0:
+            yoffset=-1
+            month=12
+        elif delta==12:
+            yoffset=0
+            month=12
         else:
-            today = today.replace(month=delta)
-        return today
+            yoffset, month = delta//12, delta%12
+            month = month if month else 12
+        try:
+            lastday=calendar.monthrange(today.year+yoffset, month)[1]
+        except:
+            print(month)
+        date = today.replace(year=today.year+yoffset, month=month, day=lastday) \
+            if today.day>=lastday else today.replace(year=today.year+yoffset, month=month)
+        return date
 
     def get_upcoming_check_event(self)->list:
         today = date.today()
@@ -56,10 +65,15 @@ class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
         last_month = self.update_date(today, 10).replace(day=1)-timedelta(days=1)
         check_events = CheckHistory.objects.exclude(date__isnull=True)
         [obj.__setattr__('end_date',self.update_date(obj.date, obj.effective_duration)) for obj in check_events]
-        interest_events = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month]
-        [obj.__setattr__('site_name', obj.product.contract_set.all()[0].site_name) for obj in interest_events]
+        interest_events_products = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month and obj.product and obj.product.contract_set.aggregate(count=Count('*'))['count']]
+        interest_events_parts = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month and obj.part and obj.part.contract_set.aggregate(count=Count('*'))['count']]
+        try:
+            [obj.__setattr__('site_name', obj.product.contract_set.all()[0].site_name) for obj in interest_events_products]
+            [obj.__setattr__('site_name', obj.part.contract_set.all()[0].site_name) for obj in interest_events_parts]
+        except: 
+            print(interest_events_parts)
         # check_events[0].product.contract_set.all()[0].site_name
-        return interest_events
+        return interest_events_products+interest_events_parts
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,7 +112,7 @@ class ProductSearchView(LoginRequiredMixin,TemplateView):
     login_url = settings.LOGIN_URL
     redirect_field_name = 'next'
     template_name = 'item_log/searchview_v2.html'
-    paginate_by = 20
+    # paginate_by = 20
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -131,7 +145,7 @@ class ComprehensiveInfoView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        contracts=context['product'].contract_set.order_by('-instalation_date')
+        contracts=context['product'].contract_set.order_by('-installation_date')
         context['contract']=None
         if contracts:
             context['contract']=contracts[0]
@@ -139,6 +153,13 @@ class ComprehensiveInfoView(LoginRequiredMixin, generic.DetailView):
         context['production_company']=context['product'].production_company
         context['checkhistories'] = context['product'].checkhistory_set.order_by('-date')
         [obj.__setattr__('end_date',self.update_date(obj.date, obj.effective_duration)) for obj in context['checkhistories']]
+        
+        context['latest_check_date']='-'
+        if len(context['checkhistories']):
+            context['latest_check_date'] = context['checkhistories'][0].date
+            context['next_check_date'] = context['checkhistories'][0].end_date
+            context['final_check_company'] = context['checkhistories'][0].inspection_agency.name
+        
         motor_faults=FaultHistory.objects.filter(parts=context['product'].motor_id).order_by('-date')
         brake_faults=FaultHistory.objects.filter(parts=context['product'].brake_id).order_by('-date')
         reduce_faults=FaultHistory.objects.filter(parts=context['product'].reducer_id).order_by('-date')
@@ -152,14 +173,22 @@ class ComprehensiveInfoView(LoginRequiredMixin, generic.DetailView):
         the input month range from -12 ~ 12
         """
         delta = today.month +month
-
-        if delta<1:
-            today = today.replace(month=12+delta).replace(year=today.year-1)
-        elif delta>12:
-            today = today.replace(month=delta-12).replace(year=today.year+1)
+        if delta == 0:
+            yoffset=-1
+            month=12
+        elif delta==12:
+            yoffset=0
+            month=12
         else:
-            today = today.replace(month=delta)
-        return today
+            yoffset, month = delta//12, delta%12
+            month = month if month else 12
+        try:
+            lastday=calendar.monthrange(today.year+yoffset, month)[1]
+        except:
+            print(month)
+        date = today.replace(year=today.year+yoffset, month=month, day=lastday) \
+            if today.day>=lastday else today.replace(year=today.year+yoffset, month=month)
+        return date
 
     def get_upcoming_check_event(self)->list:
         today = date.today()
@@ -167,7 +196,7 @@ class ComprehensiveInfoView(LoginRequiredMixin, generic.DetailView):
         last_month = self.update_date(today, 10).replace(day=1)-timedelta(days=1)
         check_events = CheckHistory.objects.exclude(date__isnull=True)
         [obj.__setattr__('end_date',self.update_date(obj.date, obj.effective_duration)) for obj in check_events]
-        interest_events = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month]
+        interest_events = [obj for obj in check_events if obj.end_date >=start_month and obj.end_date<=last_month and obj.product]
         [obj.__setattr__('site_name', obj.product.contract_set.all()[0].site_name) for obj in interest_events]
         # check_events[0].product.contract_set.all()[0].site_name
         return interest_events

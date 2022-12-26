@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import SuperUserTestMixin
 class UserIndexView(LoginRequiredMixin, SuperUserTestMixin, generic.ListView):
     template_name = 'adminpage/user_index.html'
     model = User
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'users'
     ordering = ['username']
     def get_context_data(self, **kwargs) -> dict:

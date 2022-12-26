@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', #'django.db.backends.sqlite3',
-        'NAME': 'TEST_DB2', #BASE_DIR / 'db.sqlite3',
+        'NAME': 'TEST_DB3', #BASE_DIR / 'db.sqlite3',
         'USER': 'jnb',
         'PASSWORD': 'jnbdrive-0922',
         'HOST': '127.0.0.1',

@@ -9,7 +9,7 @@ from item_log.view_lake.authority_test  import AuthorityTestMixin
 class ProductIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
     template_name = 'adminpage/product_index.html'
     model = Product
-    paginate_by = 20
+    # paginate_by = 20
     context_object_name = 'products'
 
     def get_context_data(self, **kwargs) -> dict:

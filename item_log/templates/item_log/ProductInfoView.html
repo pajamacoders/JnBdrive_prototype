@@ -11,10 +11,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
     <!-- Or for RTL support -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
-
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
     <link href="{% static 'item_log/theme/css/styles.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'item_log/table.css' %}">
 </head>
@@ -43,7 +50,7 @@
                                 <td>현장명</td>
                                 <td>{{ contract.site_name }}</td>
                                 <td>소재지</td>
-                                <td></td>
+                                <td>{{ contract.address }}</td>
                             </tr>
                             <tr>
                                 <td>제조업체</td>
@@ -53,13 +60,13 @@
                             </tr>
                             <tr>
                                 <td>적재하중</td>
-                                <td>{{ model.load_weight }}</td>
+                                <td>{{ modelType.load_weight }}</td>
                                 <td>최대정원</td>
-                                <td>{{ model.capacity }}</td>
+                                <td>{{ modelType.capacity }}</td>
                             </tr>
                             <tr>
                                 <td>운행구간</td>
-                                <td>{{ model.operation_section }}</td>
+                                <td>{{ modelType.operation_section }}</td>
                                 <td>운행층수</td>
                                 <td>{{ model.}}</td>
                             </tr>
@@ -71,13 +78,13 @@
                             </tr>
                             <tr>
                                 <td>정격속도</td>
-                                <td>{{ model.rated_speed }}</td>
+                                <td>{{ modelType.rated_speed }}</td>
                                 <td></td>
                                 <td></td>	
                             </tr>
                             <tr>
                                 <td>설치일/최초설치일</td>
-                                <td>{{ contract.instalation_date }}</td>
+                                <td>{{ contract.installation_date }}</td>
                                 <td>철거예정일</td>
                                 <td>{{ contract.withdrawal_date }}</td>
                             </tr>
@@ -85,11 +92,11 @@
                                 <td>검사유효기간(보완기간)</td>
                                 <td>{{ check_histories.effective_duration }} </td>
                                 <td>최종검사일</td>
-                                <td>{{ check_histories.date }}</td>			
+                                <td>{{ latest_check_date }}</td>			
                             </tr>
                             <tr>
                                 <td>다음 정기검사주기</td>
-                                <td>{{ check_histories.date }}</td>
+                                <td>{{ next_check_date }}</td>
                                 <td>정밀안전검사예정일</td>
                                 <td>{{ contract.next_check_date }}</td>		
                             </tr>
@@ -115,7 +122,7 @@
                             </tr>
                             <tr>
                                 <td>최종검사기관</td>
-                                <td colspan = "3"></td>
+                                <td colspan = "3">{{ final_check_company }}</td>
                             </tr>
                         </table>
                     </div>
@@ -148,7 +155,7 @@
                                 <td>안전관리자 연락처</td>
                                 <td>{{ contract.safety_checker_phone }}</td>		
                                 <td>안전관리자 선임일</td>
-                                <td>{{ contract.safety_checker }}</td>
+                                <td>{{ contract.safety_checker_higher_date }}</td>
                                 <td>교육 이수일</td>
                                 <td>{{ contract.safety_edu_comp_date }}</td>
                             </tr>
@@ -156,30 +163,42 @@
                     </div>
                     <div class="table-outer"> 
                         <table class="main">
-                            <tr>
-                                <p><th colspan = "7">검사이력</th></p>
-                            </tr>
-                            <tr>
-                                <td>검사종류</td>
-                                <td>검사일</td>
-                                <td>운행유효기간</td>
-                                <td>검사기관</td>
-                                <td>검사원</td>
-                                <td>합격유무</td> 
-                            </tr>
-                            <tr>
-                                {% for chk in checkhistories%}
-                                <td>{{ chk.check_type }}</td>
-                                <td>{{ chk.date }}</td>
-                                <td>{{ chk.effective_duration }}</td>
-                                <td>{{ chk.inspection_agency }}</td>
-                                <td>{{ chk.inspector }}</td>
-                                <td>{{ chk.result }}</td>
-                                {% empty %}
-                                <td colspan = "7">검사이력이 없습니다.</td>
-                                {% endfor %}
-                            </tr>
+                        <tr>
+                            <p><th colspan = "8">검사이력</th></p>
+                        </tr>
                         </table>
+                        <table id="example" class="display stripe nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>검사종류</th>
+                                    <th>검사일</th>
+                                    <th>부품 시리얼</th>
+                                    <th>운행유효기간(개월)</th>
+                                    <th>검사기관</th>
+                                    <th>검사원</th>
+                                    <th>합격유무</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for chk in checkhistories %}
+                                <tr>
+                                    <td>{{ chk.check_type }}</td>
+                                    <td>{{ chk.date }}</td>
+                                    {% if chk.product == None %}
+                                    <td>{{ chk.part.serial }}</td>
+                                    {% else %}
+                                    <td>{{ chk.product.serial }}</td>
+                                    {% endif %}
+                                    <td>{{ chk.effective_duration }}</td>
+                                    <td>{{ chk.inspection_agency }}</td>
+                                    <td>{{ chk.inspector }}</td>
+                                    <td>{{ chk.result }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% comment %} <table class="main"> {% endcomment %}
+
                     </div>
                     <div class="table-outer"> 
                         <table class="main">
@@ -194,19 +213,23 @@
                                 <td>고장원인</td>
                                 <td>구출기관</td>
                             </tr>
+                            {% for fault in fault_histories %}
                             <tr>
-                                {% for fault in fault_histories %}
                                 <td>{{ fault.serial }}</td>
                                 <td>{{ fault.category }}</td>
                                 <td>{{ fault.date }}</td>
                                 <td>{{ fault.fault_type }}</td>
                                 <td>{{ fault.cause }}</td>
                                 <td>{{ fault.repair_company }}</td>
-                                {% endfor %}
                             </tr>
+                            {% endfor %}
                         </table>
                     </div>
                 </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'adminpage/js/scripts.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="{% static 'adminpage/js/datatable.js' %}"></script>
 </body>

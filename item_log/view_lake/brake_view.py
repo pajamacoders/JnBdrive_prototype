@@ -4,7 +4,7 @@ from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from item_log.models import Brake
-from item_log.form_lake.break_form import BrakeUpdateForm
+from item_log.form_lake.brake_form import BrakeUpdateForm
 from item_log.view_lake.authority_test  import AuthorityTestMixin
 
 class BrakeIndexView(LoginRequiredMixin, AuthorityTestMixin, generic.ListView):
