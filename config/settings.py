@@ -75,6 +75,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+db_port = os.getenv('DB_PORT')
+db_host_adds = os.getenv('DB_HOST_ADDRESS')
+print('db info')
+print(f'port:{db_port}, address:{db_host_adds}')
 
 DATABASES = {
     'default': {
@@ -82,8 +86,8 @@ DATABASES = {
         'NAME': 'TEST_DB3', #BASE_DIR / 'db.sqlite3',
         'USER': 'jnb',
         'PASSWORD': 'jnbdrive-0922',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': db_host_adds,
+        'PORT': db_port,
     }
 }
 
@@ -126,7 +130,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS=(
 os.path.join(BASE_DIR, 'item_log/static'),
 )
+
 SESSION_COOKIE_AGE = 7200
+#SESSION_COOKIE_SECURE=True
+# CSRF_COOKIE_SECURE=True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

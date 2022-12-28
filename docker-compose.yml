@@ -5,10 +5,29 @@ services:
     ports:
       - 3306:3306 
     volumes:
-      - /home/sabi/jnbdrive_disk:/var/lib/mysql
+      - /home/sabi/jnbdrive_disk:/var/lib/mysql # change it on production env
+    restart: always
     environment:
       MYSQL_HOST: mysql
-      MYSQL_ROOT_PASSWORD: Gotobali1!
-      MYSQL_USER: jnb
-      MYSQL_PASSWORD: jnbdrive-0922
-      MYSQL_DATABASE: jnbdrive
+      MYSQL_ROOT_PASSWORD: Gotobali1! # change it on production env
+      MYSQL_USER: jnb # change it on production env
+      MYSQL_PASSWORD: jnbdrive-0922 # change it on production env
+      MYSQL_DATABASE: jnbdrive # change it on production env
+
+  jnb_web:
+    depends_on:
+      - mysql
+    build: .
+    image: web_server:latest
+    ports:
+      - 8000:8000
+    restart: always
+    environment:
+      DB_PORT: 3306
+      DB_HOST_ADDRESS: mysql
+    volumes: 
+      - ${PWD}:/home/docker/workspace/jnbdrive_app
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+  

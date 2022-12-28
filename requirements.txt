@@ -1,0 +1,11 @@
+asgiref==3.5.2
+autopep8==2.0.0
+beautifulsoup4==4.11.1
+Django==4.1.1
+django-bootstrap-v5==1.0.11
+mysqlclient==2.1.1
+numpy==1.24.0
+pycodestyle==2.9.1
+soupsieve==2.3.2.post1
+sqlparse==0.4.3
+tomli==2.0.1
