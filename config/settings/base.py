@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -75,8 +75,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-db_port = os.getenv('DB_PORT')
-db_host_adds = os.getenv('DB_HOST_ADDRESS')
+db_port = 3306#os.getenv('DB_PORT')
+db_host_adds = '127.0.0.1'#os.getenv('DB_HOST_ADDRESS')
 print('db info')
 print(f'port:{db_port}, address:{db_host_adds}')
 

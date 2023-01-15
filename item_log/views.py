@@ -13,10 +13,10 @@ from datetime import date, timedelta
 import calendar
 
 # from .models import Item, Buyer, SalesHistory, InspectionLog
-
+LOGIN_URL = '/login/'
 
 class AdminPageView(LoginRequiredMixin, AuthorityTestMixin, TemplateView):
-    login_url = settings.LOGIN_URL
+    login_url = LOGIN_URL
     template_name = 'adminpage/barchart.html'
 
     def get_parts_statics(self)-> list:
@@ -109,7 +109,7 @@ class SearchSystemLoginView(LoginView):
         return context
 
 class ProductSearchView(LoginRequiredMixin,TemplateView):
-    login_url = settings.LOGIN_URL
+    login_url = LOGIN_URL
     redirect_field_name = 'next'
     template_name = 'item_log/searchview_v2.html'
     # paginate_by = 20
@@ -137,7 +137,7 @@ class ProductSearchView(LoginRequiredMixin,TemplateView):
         return context
 
 class ComprehensiveInfoView(LoginRequiredMixin, generic.DetailView):
-    login_url = settings.LOGIN_URL
+    login_url = LOGIN_URL
     redirect_field_name = 'next'
     template_name = 'item_log/ProductInfoView.html'
     pk_url_kwarg='serial'

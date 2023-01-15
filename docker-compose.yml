@@ -14,20 +14,20 @@ services:
       MYSQL_PASSWORD: jnbdrive-0922 # change it on production env
       MYSQL_DATABASE: jnbdrive # change it on production env
 
-  jnb_web:
-    depends_on:
-      - mysql
-    build: .
-    image: web_server:latest
-    ports:
-      - 8000:8000
-    restart: always
-    environment:
-      DB_PORT: 3306
-      DB_HOST_ADDRESS: mysql
-    volumes: 
-      - ${PWD}:/home/docker/workspace/jnbdrive_app
-    command: python manage.py runserver 0.0.0.0:8000
+  # jnb_web:
+  #   depends_on:
+  #     - mysql
+  #   build: .
+  #   image: web_server:latest
+  #   ports:
+  #     - 80:80
+  #   restart: always
+  #   environment:
+  #     DB_PORT: 3306
+  #     DB_HOST_ADDRESS: mysql
+  #   volumes: 
+  #     - ${PWD}:/home/docker/workspace/jnbdrive_app
+  #   command: sh start_server.sh
 
 
   

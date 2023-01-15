@@ -111,8 +111,21 @@ RUN set -eux; \
 	\
 	pip --version
 
-WORKDIR /home/docker/workspace/jnbdrive_app
+
+RUN apt update && apt install sudo systemctl nginx -y \
+&& useradd nginx \
+&& mkdir /home/nginx \
+&& chown nginx /home/nginx \
+&& rm /etc/nginx/sites-enabled/default
+
+WORKDIR /home/nginx/workspace/jnbdrive_app
 COPY . .
-RUN pip install -r requirements.txt
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY jnbdrive_nginx /etc/nginx/sites-available/jnbdrive
+
+RUN ln -s /etc/nginx/sites-available/jnbdrive /etc/nginx/sites-enabled/jnbdrive \
+&& pip install -r requirements.txt \
+&& chmod 777 /home/nginx/workspace/jnbdrive_app/start_server.sh
+
 EXPOSE 8000
 
