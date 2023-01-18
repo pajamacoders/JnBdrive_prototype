@@ -1,5 +1,22 @@
 version: "3.7"
 services:
+  nginx:                 
+    restart: on-failure
+    image: nginx:stable
+    volumes:
+      - ${PWD}/etc/jnbdrive_nginx:/etc/nginx/sites-enabled/default
+      - ${PWD}/etc/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${PWD}/etc/proxy_params:/etc/nginx/proxy_params
+      - ${PWD}/staticfiles:/home/nginx/www/static
+       
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      DJANGO_HOST: jnb_web
+    depends_on:
+      - jnb_web
+
   mysql:
     image: mysql:8.0.31
     ports:
@@ -13,21 +30,28 @@ services:
       MYSQL_USER: jnb # change it on production env
       MYSQL_PASSWORD: jnbdrive-0922 # change it on production env
       MYSQL_DATABASE: jnbdrive # change it on production env
+    networks:
+      - backend
 
-  # jnb_web:
-  #   depends_on:
-  #     - mysql
-  #   build: .
-  #   image: web_server:latest
-  #   ports:
-  #     - 80:80
-  #   restart: always
-  #   environment:
-  #     DB_PORT: 3306
-  #     DB_HOST_ADDRESS: mysql
-  #   volumes: 
-  #     - ${PWD}:/home/docker/workspace/jnbdrive_app
-  #   command: sh start_server.sh
+  jnb_web:
+    depends_on:
+      - mysql
+    build: .
+    image: web_server:latest
+    ports:
+      - 8000:8000
+    restart: always
+    environment:
+      DB_PORT: 3306
+      DB_HOST_ADDRESS: mysql
+    volumes: 
+      - ${PWD}:/home/docker/workspace/jnbdrive_app
+    networks:
+      - backend
 
+    command: gunicorn --workers 2 --bind 0.0.0.0:8000 config.wsgi:application 
 
-  
+networks:
+  backend:
+    # Use a custom driver
+    driver: bridge
