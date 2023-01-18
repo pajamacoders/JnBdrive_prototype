@@ -77,8 +77,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 db_port = 3306#os.getenv('DB_PORT')
 db_host_adds = '127.0.0.1'#os.getenv('DB_HOST_ADDRESS')
-print('db info')
-print(f'port:{db_port}, address:{db_host_adds}')
+
 
 DATABASES = {
     'default': {

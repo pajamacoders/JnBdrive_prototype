@@ -1,6 +1,7 @@
 version: "3.7"
 services:
   nginx:                 
+    container_name: nginx
     restart: on-failure
     image: nginx:stable
     volumes:
@@ -18,11 +19,12 @@ services:
       - jnb_web
 
   mysql:
+    container_name: mysql
     image: mysql:8.0.31
     ports:
       - 3306:3306 
     volumes:
-      - /home/sabi/jnbdrive_disk:/var/lib/mysql # change it on production env
+      - ${HOME}/jnbdrive_disk:/var/lib/mysql # change it on production env
     restart: always
     environment:
       MYSQL_HOST: mysql
@@ -34,10 +36,11 @@ services:
       - backend
 
   jnb_web:
+    container_name: jnb_web
     depends_on:
       - mysql
     build: .
-    image: web_server:latest
+    image: jnb_app:latest
     ports:
       - 8000:8000
     restart: always

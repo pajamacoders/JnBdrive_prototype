@@ -1,5 +1,5 @@
 upstream jnbdrive_app{
-        server 192.168.0.102:8000
+        server 192.168.0.102:8000;
 }
 server {
         listen 80;
@@ -8,7 +8,7 @@ server {
         location = /favicon.ico { access_log off; log_not_found off; }
 
         location /static {
-                alias /home/nginx/workspace/jnbdrive_app/item_log/static;
+                alias /home/nginx/www/static;
         }
 
         location / {
