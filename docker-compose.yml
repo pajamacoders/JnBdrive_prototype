@@ -18,41 +18,22 @@ services:
     depends_on:
       - jnb_web
 
-  mysql:
-    container_name: mysql
-    image: mysql:8.0.31
-    ports:
-      - 3306:3306 
-    volumes:
-      - ${HOME}/jnbdrive_disk:/var/lib/mysql # change it on production env
-    restart: always
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_ROOT_PASSWORD: Gotobali1! # change it on production env
-      MYSQL_USER: jnb # change it on production env
-      MYSQL_PASSWORD: jnbdrive-0922 # change it on production env
-      MYSQL_DATABASE: jnbdrive # change it on production env
-    networks:
-      - backend
-
   jnb_web:
     container_name: jnb_web
-    depends_on:
-      - mysql
     build: .
-    image: jnb_app:latest
+    image: jnb_ap:latest
     ports:
       - 8000:8000
     restart: always
     environment:
       DB_PORT: 3306
-      DB_HOST_ADDRESS: mysql
+      DB_HOST_ADDRESS: jnbdrive-product.cie6ndifnblb.ap-northeast-2.rds.amazonaws.com
     volumes: 
       - ${PWD}:/home/docker/workspace/jnbdrive_app
     networks:
       - backend
 
-    command: gunicorn --workers 2 --bind 0.0.0.0:8000 config.wsgi:application 
+    command: gunicorn --workers 1 --bind 0.0.0.0:8000 config.wsgi:application 
 
 networks:
   backend:

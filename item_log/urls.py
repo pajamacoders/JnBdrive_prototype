@@ -16,6 +16,7 @@ from .view_lake.product_view import *
 from .view_lake.user_view import *
 app_name = 'item_log'
 urlpatterns = [
+     path('', views.ProductSearchView.as_view(), name='product_search'),
     path('login/', views.SearchSystemLoginView.as_view(
         template_name='item_log/login.html'), name='user_login'),
     path('logout/', views.SearchSystemLogoutView.as_view(

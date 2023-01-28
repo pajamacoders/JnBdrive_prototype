@@ -1,9 +1,9 @@
 upstream jnbdrive_app{
-        server 192.168.0.102:8000;
+        server jnbdrive.info:8000;
 }
 server {
         listen 80;
-        server_name 192.168.0.102; ##client 가 접속하는 도메인네임, 장고 app 의 서버 주소
+        server_name jnbdrive.info; ##client 가 접속하는 도메인네임, 장고 app 의 서버 주소
 
         location = /favicon.ico { access_log off; log_not_found off; }
 
