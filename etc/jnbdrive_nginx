@@ -1,10 +1,11 @@
 upstream jnbdrive_app{
-        server jnbdrive.info:8000;
+        server jnb_web:8000;
 }
 server {
         listen 80;
         server_name jnbdrive.info; ##client 가 접속하는 도메인네임, 장고 app 의 서버 주소
-
+        # redirect https setting
+  
         location = /favicon.ico { access_log off; log_not_found off; }
 
         location /static {

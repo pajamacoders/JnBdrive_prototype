@@ -12,11 +12,10 @@ services:
        
     ports:
       - 80:80
-      - 443:443
-    environment:
-      DJANGO_HOST: jnb_web
     depends_on:
       - jnb_web
+    networks:
+      - backend
 
   jnb_web:
     container_name: jnb_web
