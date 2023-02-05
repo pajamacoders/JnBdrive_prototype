@@ -14,6 +14,7 @@ from .view_lake.fault_history_view import *
 from .view_lake.contract_view import *
 from .view_lake.product_view import *
 from .view_lake.user_view import *
+from .view_lake.qrcode_genview import *
 app_name = 'item_log'
 urlpatterns = [
      path('', views.ProductSearchView.as_view(), name='product_search'),
@@ -25,6 +26,8 @@ urlpatterns = [
     path('info/<str:serial>', views.ComprehensiveInfoView.as_view(),
          name='product_info'),
     path('admin/', views.AdminPageView.as_view(), name='dashboard'),
+    #generate code
+    path('admin/qrcode/<str:value>/', QRCodeView.as_view(), name='create_qrcode'),
     # motor
     path('admin/parts/motors/lists', MotorIndexView.as_view(), name='motor_list'),
     path('admin/motor/create', MotorCreateView.as_view(), name='motor_create'),

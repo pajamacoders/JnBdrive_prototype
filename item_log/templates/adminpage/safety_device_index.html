@@ -8,7 +8,6 @@
 {% block table_contents %}
     <thead>
         <tr>
-            
             <th>가바나 시리얼</th>
             <th>생산일</th>
             <th>폐기일</th>
@@ -30,7 +29,9 @@
     <tbody>
     {% for safety_device in safety_devices %}
         <tr>
-            <td>{{ safety_device.serial }}</td>
+            <td><a href="" data-bs-toggle="modal" data-bs-target="#qrcodemodal"
+                data-bs-id="{{ safety_device.serial }}" data-bs-todo="{% url 'item_log:create_qrcode' safety_device.serial %}"
+                data-bs-save="{{ safety_device.serial }}">{{ safety_device.serial }}</a></td>
             <td>{{ safety_device.production_date|date:'Y-m-d' }}</td>
             <td>{{ safety_device.discard_date|date:'Y-m-d' }}</td>
             <td>{{ safety_device.safetydevice.product.serial }}</td>
@@ -69,6 +70,23 @@
         </div>
         </div>
     </div>
+
+    <!--QRCode modal-->
+    <div class="modal" id="qrcodemodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="qrcodeModalLabel"></h5>
+            </div>
+            <div class="modal-body"><img id="qrcode_image"></img></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save_qrcode">QRCode 다운로드</button>
+            </div>
+        </div>
+        </div>
+    </div>
     
     <script src="{% static 'adminpage/js/delete_confirm_modal.js' %}"></script>
+    <script src="{% static 'adminpage/js/qrcode_modal.js' %}"></script>
 {% endblock %}
